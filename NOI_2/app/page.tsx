@@ -5,15 +5,11 @@ import AppShell from '@/components/AppShell'
 import HomeScreen from '@/components/HomeScreen'
 import ContextSelector from '@/components/ContextSelector'
 import ScenarioCard from '@/components/ScenarioCard'
-import ResponseInput from '@/components/ResponseInput'
-import ListeningDashboard from '@/components/ListeningDashboard'
-import FeedbackPanel from '@/components/FeedbackPanel'
-import AlternativeResponse from '@/components/AlternativeResponse'
+import ConversationScreen from '@/components/ConversationScreen'
 import ReflectionForm from '@/components/ReflectionForm'
 import SummaryScreen from '@/components/SummaryScreen'
 import HistoryView from '@/components/HistoryView'
 
-import { analyzeListeningResponse } from '@/lib/analyzeListeningResponse'
 import { generateScenario } from '@/lib/generateScenario'
 import {
   saveExperience,
@@ -26,6 +22,7 @@ import {
   AppScreen,
   AnalysisResult,
   Context,
+  ConversationTurn,
   SavedExperience,
   Scenario,
 } from '@/lib/types'
@@ -37,7 +34,7 @@ export default function Home() {
   const [screen, setScreen] = useState<AppScreen>('home')
   const [selectedContext, setSelectedContext] = useState<Context | null>(null)
   const [currentScenario, setCurrentScenario] = useState<Scenario | null>(null)
-  const [userResponse, setUserResponse] = useState('')
+  const [conversationTurns, setConversationTurns] = useState<ConversationTurn[]>([])
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null)
   const [reflection, setReflection] = useState('')
   const [savedExperiences, setSavedExperiences] = useState<SavedExperience[]>([])
@@ -70,7 +67,7 @@ export default function Home() {
     if (!selectedContext) return
     const scenario = generateScenario(selectedContext, usedScenarioIds)
     setCurrentScenario(scenario)
-    setUserResponse('')
+    setConversationTurns([])
     setAnalysisResult(null)
     setReflection('')
     goTo('scenario')
@@ -80,33 +77,33 @@ export default function Home() {
     if (!selectedContext) return
     const scenario = generateScenario(selectedContext, usedScenarioIds)
     setCurrentScenario(scenario)
-    setUserResponse('')
+    setConversationTurns([])
     setAnalysisResult(null)
   }
 
-  const handleResponseSubmit = (response: string) => {
-    if (!currentScenario || !selectedContext) return
-    setUserResponse(response)
-    const analysis = analyzeListeningResponse(response, currentScenario, selectedContext)
-    setAnalysisResult(analysis)
-    // Track used scenario
+  const handleConversationComplete = (turns: ConversationTurn[]) => {
+    if (!currentScenario) return
+    const lastAnalysis = turns[turns.length - 1].analysis
+    setConversationTurns(turns)
+    setAnalysisResult(lastAnalysis)
     setUsedScenarioIds((prev) => [...prev, currentScenario.id])
-    goTo('dashboard')
+    goTo('reflection')
   }
 
   const handleReflectionSave = (ref: string) => {
     setReflection(ref)
 
-    // Save the full experience
     if (currentScenario && selectedContext && analysisResult) {
+      const lastUserResponse = conversationTurns[conversationTurns.length - 1]?.userResponse ?? ''
       const experience: SavedExperience = {
         id: generateExperienceId(),
         timestamp: Date.now(),
         context: selectedContext,
         scenario: currentScenario,
-        userResponse,
+        userResponse: lastUserResponse,
         analysis: analysisResult,
         reflection: ref,
+        turns: conversationTurns,
       }
       saveExperience(experience)
       setSavedExperiences(getExperiences())
@@ -122,7 +119,7 @@ export default function Home() {
     }
     const scenario = generateScenario(selectedContext, usedScenarioIds)
     setCurrentScenario(scenario)
-    setUserResponse('')
+    setConversationTurns([])
     setAnalysisResult(null)
     setReflection('')
     goTo('scenario')
@@ -131,7 +128,7 @@ export default function Home() {
   const handleChangeContext = () => {
     setSelectedContext(null)
     setCurrentScenario(null)
-    setUserResponse('')
+    setConversationTurns([])
     setAnalysisResult(null)
     setReflection('')
     goTo('context')
@@ -174,52 +171,20 @@ export default function Home() {
         return (
           <ScenarioCard
             scenario={currentScenario}
-            onProceed={() => goTo('response')}
+            onProceed={() => goTo('conversation')}
             onRegenerate={handleRegenerate}
             onBack={() => goTo('context')}
           />
         )
 
-      case 'response':
-        if (!currentScenario) return null
+      case 'conversation':
+        if (!currentScenario || !selectedContext) return null
         return (
-          <ResponseInput
+          <ConversationScreen
             scenario={currentScenario}
-            initialValue={userResponse}
-            onSubmit={handleResponseSubmit}
+            context={selectedContext}
+            onComplete={handleConversationComplete}
             onBack={() => goTo('scenario')}
-          />
-        )
-
-      case 'dashboard':
-        if (!analysisResult) return null
-        return (
-          <ListeningDashboard
-            analysis={analysisResult}
-            onContinue={() => goTo('feedback')}
-            onBack={() => goTo('response')}
-          />
-        )
-
-      case 'feedback':
-        if (!analysisResult) return null
-        return (
-          <FeedbackPanel
-            feedback={analysisResult.feedback}
-            onContinue={() => goTo('alternative')}
-            onBack={() => goTo('dashboard')}
-          />
-        )
-
-      case 'alternative':
-        if (!analysisResult) return null
-        return (
-          <AlternativeResponse
-            userResponse={userResponse}
-            alternativeResponse={analysisResult.alternativeResponse}
-            whyAlternativeWorks={analysisResult.whyAlternativeWorks}
-            onContinue={() => goTo('reflection')}
-            onBack={() => goTo('feedback')}
           />
         )
 
@@ -227,7 +192,7 @@ export default function Home() {
         return (
           <ReflectionForm
             onSave={handleReflectionSave}
-            onBack={() => goTo('alternative')}
+            onBack={() => goTo('conversation')}
           />
         )
 
@@ -237,7 +202,7 @@ export default function Home() {
           <SummaryScreen
             context={selectedContext}
             scenario={currentScenario}
-            userResponse={userResponse}
+            turns={conversationTurns}
             analysis={analysisResult}
             reflection={reflection}
             onRestart={handleRestartSameContext}

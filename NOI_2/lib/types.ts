@@ -69,6 +69,12 @@ export interface AnalysisResult extends IndicatorScores {
   whyAlternativeWorks: string
 }
 
+export interface ConversationTurn {
+  appMessage: string
+  userResponse: string
+  analysis: AnalysisResult
+}
+
 export interface SavedExperience {
   id: string
   timestamp: number
@@ -77,16 +83,14 @@ export interface SavedExperience {
   userResponse: string
   analysis: AnalysisResult
   reflection: string
+  turns: ConversationTurn[]
 }
 
 export type AppScreen =
   | 'home'
   | 'context'
   | 'scenario'
-  | 'response'
-  | 'dashboard'
-  | 'feedback'
-  | 'alternative'
+  | 'conversation'
   | 'reflection'
   | 'summary'
   | 'history'
