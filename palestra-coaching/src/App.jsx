@@ -175,10 +175,9 @@ export default function PalestraCoaching() {
     msgs.map(m => `${m.role === 'coach' ? 'COACH' : character?.name}: ${m.content}`).join('\n\n');
 
   const callClaude = async (system, userContent) => {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
+    const res = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json",
-        "anthropic-dangerous-allow-browser": "true" },
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
         max_tokens: 1000,
@@ -191,10 +190,9 @@ export default function PalestraCoaching() {
   };
 
   const callCoachee = async (msgs) => {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
+    const res = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json",
-        "anthropic-dangerous-allow-browser": "true" },
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
         max_tokens: 1000,
