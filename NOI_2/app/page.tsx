@@ -10,6 +10,7 @@ import ListeningDashboard from '@/components/ListeningDashboard'
 import FeedbackPanel from '@/components/FeedbackPanel'
 import AlternativeResponse from '@/components/AlternativeResponse'
 import ReflectionForm from '@/components/ReflectionForm'
+import CelebrationScreen from '@/components/CelebrationScreen'
 import SummaryScreen from '@/components/SummaryScreen'
 import HistoryView from '@/components/HistoryView'
 
@@ -112,7 +113,11 @@ export default function Home() {
       setSavedExperiences(getExperiences())
     }
 
-    goTo('summary')
+    // Se l'ascolto è stato di qualità, mostra la schermata di celebrazione
+    const highQuality =
+      analysisResult?.globalState === 'curiosità' ||
+      analysisResult?.globalState === 'presenza'
+    goTo(highQuality ? 'celebration' : 'summary')
   }
 
   const handleRestartSameContext = () => {
@@ -231,6 +236,19 @@ export default function Home() {
           />
         )
 
+      case 'celebration':
+        if (!analysisResult || !selectedContext) return null
+        return (
+          <CelebrationScreen
+            globalState={analysisResult.globalState}
+            globalStateNuance={analysisResult.globalStateNuance}
+            context={selectedContext}
+            onNewScenario={handleRestartSameContext}
+            onChangeContext={handleChangeContext}
+            onViewSummary={() => goTo('summary')}
+          />
+        )
+
       case 'summary':
         if (!currentScenario || !selectedContext || !analysisResult) return null
         return (
@@ -265,4 +283,4 @@ export default function Home() {
       {renderScreen()}
     </AppShell>
   )
-}
+    }
