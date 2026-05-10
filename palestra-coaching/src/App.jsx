@@ -177,7 +177,8 @@ export default function PalestraCoaching() {
   const callClaude = async (system, userContent) => {
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json",
+        "anthropic-dangerous-allow-browser": "true" },
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
         max_tokens: 1000,
@@ -192,7 +193,8 @@ export default function PalestraCoaching() {
   const callCoachee = async (msgs) => {
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json",
+        "anthropic-dangerous-allow-browser": "true" },
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
         max_tokens: 1000,
