@@ -177,7 +177,7 @@ export default function PalestraCoaching() {
   const callClaude = async (system, userContent) => {
     const res = await fetch("/api/chat", {
       method: "POST",
-      headers: { "Content-Type": "application/json",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
         max_tokens: 1000,
@@ -192,7 +192,7 @@ export default function PalestraCoaching() {
   const callCoachee = async (msgs) => {
     const res = await fetch("/api/chat", {
       method: "POST",
-      headers: { "Content-Type": "application/json",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
         max_tokens: 1000,
