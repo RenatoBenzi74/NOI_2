@@ -88,6 +88,7 @@ export type AppScreen =
   | 'feedback'
   | 'alternative'
   | 'reflection'
+  | 'celebration'
   | 'summary'
   | 'history'
 
