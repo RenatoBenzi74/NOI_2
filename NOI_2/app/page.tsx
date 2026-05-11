@@ -281,6 +281,7 @@ export default function Home() {
         return (
           <FeedbackPanel
             feedback={analysisResult.feedback}
+            bestAnalysis={dialogueTurns.length > 0 ? analysisResult : undefined}
             turns={dialogueTurns.length > 0 ? dialogueTurns : undefined}
             onContinue={() => goTo('alternative')}
             onSave={dialogueTurns.length > 0 ? handleReflectionSave : undefined}
@@ -361,4 +362,4 @@ export default function Home() {
       {renderScreen()}
     </AppShell>
   )
-    }
+}
