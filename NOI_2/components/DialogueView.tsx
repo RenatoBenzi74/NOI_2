@@ -290,7 +290,7 @@ export default function DialogueView({
   const progressValue = (turnIndex / MAX_TURNS) * 100
 
   return (
-    <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+    <div style={{ height: '100dvh', display: 'flex', flexDirection: 'column', overflow: 'hidden', position: 'relative' }}>
       <style>{`
         @keyframes bubbleIn {
           from { opacity: 0; transform: translateX(-16px) translateY(8px); }
@@ -355,7 +355,7 @@ export default function DialogueView({
         </div>
       </div>
       {phase !== 'ended' && (
-        <div style={{ position: 'sticky', bottom: 0, background: 'rgba(26,23,64,0.95)', backdropFilter: 'blur(20px)', borderTop: '1px solid rgba(255,255,255,0.08)', padding: '1rem 1.25rem', paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
+        <div style={{ flexShrink: 0, background: 'rgba(26,23,64,0.95)', backdropFilter: 'blur(20px)', borderTop: '1px solid rgba(255,255,255,0.08)', padding: '1rem 1.25rem', paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}>
           <div style={{ maxWidth: '640px', margin: '0 auto' }}>
             {phase === 'reading' && (
               <button className="btn-primary" style={{ width: '100%' }} onClick={handleStartTyping}>
