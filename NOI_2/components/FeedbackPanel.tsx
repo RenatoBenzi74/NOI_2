@@ -1,19 +1,20 @@
 'use client'
 
 // ============================================================
-// NOI² – FeedbackPanel v2
-// Dialogue mode: per-turn comparison + inline alternative
-// Single-response mode: 4 blocks with reflection textareas
+// NOI² – FeedbackPanel v3
+// Dialogue mode: compact exchange list → single unified reflection
+// Single-response mode: 4 blocks with optional reflection textareas
 // ============================================================
 
 import { useState } from 'react'
-import { FeedbackBlocks, DialogueTurn, ListeningState } from '@/lib/types'
+import { FeedbackBlocks, DialogueTurn, AnalysisResult, ListeningState } from '@/lib/types'
 
 interface FeedbackPanelProps {
-  feedback: FeedbackBlocks           // aggregated (single-response mode)
-  turns?: DialogueTurn[]             // dialogue mode: full history
-  onContinue: () => void             // single-response: go to alternative
-  onSave?: (reflection: string) => void  // dialogue mode: save & go to summary
+  feedback: FeedbackBlocks             // best/aggregated feedback
+  bestAnalysis?: AnalysisResult        // full best analysis (for alt response)
+  turns?: DialogueTurn[]               // dialogue mode: full history
+  onContinue: () => void               // single-response: go to alternative
+  onSave?: (reflection: string) => void // dialogue mode: save & go to summary
   onBack: () => void
 }
 
@@ -31,12 +32,12 @@ const STATE_CONFIG: Record<ListeningState, {
 const FEEDBACK_BLOCKS = [
   {
     key: 'closure' as keyof FeedbackBlocks,
-    title: 'Dove ti stai chiudendo',
+    title: 'Dove ti sei chiuso',
     icon: '🔒',
     color: 'rgba(239,68,68,0.08)',
     border: 'rgba(239,68,68,0.2)',
     text: '#fca5a5',
-    placeholder: 'Cosa noti in questa risposta…',
+    placeholder: 'Cosa noti in questo pattern…',
   },
   {
     key: 'opening' as keyof FeedbackBlocks,
@@ -58,7 +59,7 @@ const FEEDBACK_BLOCKS = [
   },
   {
     key: 'horizon' as keyof FeedbackBlocks,
-    title: "Come potresti aprire l'orizzonte",
+    title: "Come aprire l'orizzonte",
     icon: '🔭',
     color: 'rgba(245,158,11,0.08)',
     border: 'rgba(245,158,11,0.2)',
@@ -69,14 +70,13 @@ const FEEDBACK_BLOCKS = [
 
 // ── Types ─────────────────────────────────────────────────────
 
-type TurnReflection = { closure: string; opening: string; unheard: string; horizon: string }
-type ReflectionsMap = Record<number, TurnReflection>
+type Reflection = { closure: string; opening: string; unheard: string; horizon: string }
 
-function emptyReflection(): TurnReflection {
+function emptyReflection(): Reflection {
   return { closure: '', opening: '', unheard: '', horizon: '' }
 }
 
-// ── Back arrow icon ───────────────────────────────────────────
+// ── Shared sub-components ─────────────────────────────────────
 
 function BackArrow() {
   return (
@@ -87,14 +87,10 @@ function BackArrow() {
   )
 }
 
-// ── Reusable textarea ─────────────────────────────────────────
-
 function ReflectionTextarea({
   value, onChange, placeholder,
 }: {
-  value: string
-  onChange: (v: string) => void
-  placeholder: string
+  value: string; onChange: (v: string) => void; placeholder: string
 }) {
   return (
     <textarea
@@ -122,10 +118,10 @@ function ReflectionTextarea({
     />
   )
 }
-// ── Single feedback+reflection block ─────────────────────────
 
 function FeedbackBlock({
-  icon, title, content, colorBg, colorBorder, colorText, placeholder, value, onChange,
+  icon, title, content, colorBg, colorBorder, colorText,
+  placeholder, value, onChange,
 }: {
   icon: string; title: string; content: string
   colorBg: string; colorBorder: string; colorText: string
@@ -141,17 +137,11 @@ function FeedbackBlock({
       <div style={{ padding: '13px 14px 8px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '7px', marginBottom: '8px' }}>
           <span style={{ fontSize: '13px' }}>{icon}</span>
-          <span style={{
-            fontSize: '11px', fontWeight: 600,
-            textTransform: 'uppercase', letterSpacing: '0.05em', color: colorText,
-          }}>
+          <span style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: colorText }}>
             {title}
           </span>
         </div>
-        <p style={{
-          fontSize: '12.5px', lineHeight: '1.65',
-          color: 'rgba(240,238,255,0.78)', margin: 0,
-        }}>
+        <p style={{ fontSize: '12.5px', lineHeight: '1.65', color: 'rgba(240,238,255,0.78)', margin: 0 }}>
           {content}
         </p>
       </div>
@@ -165,38 +155,21 @@ function FeedbackBlock({
 // ── Main component ────────────────────────────────────────────
 
 export default function FeedbackPanel({
-  feedback, turns, onContinue, onSave, onBack,
+  feedback, bestAnalysis, turns, onContinue, onSave, onBack,
 }: FeedbackPanelProps) {
-  const [reflections, setReflections] = useState<ReflectionsMap>({})
+  const [reflection, setReflection] = useState<Reflection>(emptyReflection())
 
-  const getRef = (idx: number): TurnReflection => reflections[idx] ?? emptyReflection()
-
-  const setField = (idx: number, field: keyof TurnReflection, value: string) => {
-    setReflections(prev => ({
-      ...prev,
-      [idx]: { ...getRef(idx), [field]: value },
-    }))
+  const setField = (field: keyof Reflection, value: string) => {
+    setReflection(prev => ({ ...prev, [field]: value }))
   }
 
   const buildReflectionText = (): string => {
-    if (!turns || turns.length === 0) {
-      const r = getRef(0)
-      return [
-        r.closure  && `Chiusura: ${r.closure}`,
-        r.opening  && `Apertura: ${r.opening}`,
-        r.unheard  && `Non ascoltato: ${r.unheard}`,
-        r.horizon  && `Orizzonte: ${r.horizon}`,
-      ].filter(Boolean).join('\n\n')
-    }
-    return turns.map((turn, i) => {
-      const r = getRef(turn.turnIndex)
-      const lines = [`Momento ${i + 1}:`]
-      if (r.closure) lines.push(`  Chiusura: ${r.closure}`)
-      if (r.opening) lines.push(`  Apertura: ${r.opening}`)
-      if (r.unheard) lines.push(`  Non ascoltato: ${r.unheard}`)
-      if (r.horizon) lines.push(`  Orizzonte: ${r.horizon}`)
-      return lines.join('\n')
-    }).join('\n\n')
+    return [
+      reflection.closure  && `Chiusura: ${reflection.closure}`,
+      reflection.opening  && `Apertura: ${reflection.opening}`,
+      reflection.unheard  && `Non ascoltato: ${reflection.unheard}`,
+      reflection.horizon  && `Orizzonte: ${reflection.horizon}`,
+    ].filter(Boolean).join('\n\n')
   }
 
   const handlePrimary = () => {
@@ -210,172 +183,154 @@ export default function FeedbackPanel({
   // ── DIALOGUE MODE ──────────────────────────────────────────
   if (turns && turns.length > 0) {
     return (
-      <div style={{
-        height: '100dvh', overflow: 'hidden',
-        display: 'flex', flexDirection: 'column',
-      }}>
+      <div style={{ height: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
 
         {/* Header */}
         <div style={{ flexShrink: 0, padding: '2rem 1.25rem 1rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <button
-              className="btn-ghost"
-              style={{ padding: 0, flexShrink: 0 }}
-              onClick={onBack}
-            >
+            <button className="btn-ghost" style={{ padding: 0, flexShrink: 0 }} onClick={onBack}>
               <BackArrow />
             </button>
             <div>
               <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'white', margin: 0 }}>
-                Il tuo ascolto, passo per passo
+                Come hai ascoltato
               </h2>
               <p style={{ fontSize: '11px', color: 'rgba(240,238,255,0.45)', margin: '2px 0 0' }}>
-                {turns.length} {turns.length === 1 ? 'scambio' : 'scambi'} · riflessioni opzionali
+                {turns.length} scambi · riflessione opzionale
               </p>
             </div>
           </div>
         </div>
-        {/* Scrollable turns */}
-        <div style={{ flex: 1, overflowY: 'auto', padding: '0 1.25rem' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', paddingBottom: '1rem' }}>
 
+        {/* Scrollable content */}
+        <div style={{ flex: 1, overflowY: 'auto', padding: '0 1.25rem' }}>
+
+          {/* ── Compact exchange list ── */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginBottom: '2rem' }}>
             {turns.map((turn, i) => {
               const cfg = STATE_CONFIG[turn.analysis.globalState]
-              const r = getRef(turn.turnIndex)
-
               return (
                 <div key={turn.turnIndex}>
-
-                  {/* Step divider */}
-                  <div style={{
-                    display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px',
-                  }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
                     <div style={{
-                      width: 26, height: 26, borderRadius: '50%', flexShrink: 0,
+                      width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
                       background: 'rgba(240,238,255,0.07)',
-                      border: '1px solid rgba(240,238,255,0.18)',
+                      border: '1px solid rgba(240,238,255,0.15)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: '11px', fontWeight: 700, color: 'rgba(240,238,255,0.55)',
+                      fontSize: '10px', fontWeight: 700, color: 'rgba(240,238,255,0.45)',
                     }}>
                       {i + 1}
                     </div>
-                    <div style={{ flex: 1, height: 1, background: 'rgba(240,238,255,0.07)' }} />
+                    <div style={{ flex: 1, height: 1, background: 'rgba(240,238,255,0.06)' }} />
                   </div>
-
-                  {/* Chat exchange */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '14px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-                      <div style={{
-                        maxWidth: '85%',
-                        background: 'rgba(240,238,255,0.07)',
-                        border: '1px solid rgba(240,238,255,0.11)',
-                        borderRadius: '18px 18px 18px 4px',
-                        padding: '10px 14px',
-                        fontSize: '13px', lineHeight: '1.55',
-                        color: 'rgba(240,238,255,0.82)',
-                      }}>
-                        {turn.otherPersonMessage}
-                      </div>
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px' }}>
-                      <div style={{
-                        maxWidth: '85%',
-                        background: 'rgba(100,80,220,0.22)',
-                        border: '1px solid rgba(140,120,255,0.28)',
-                        borderRadius: '18px 18px 4px 18px',
-                        padding: '10px 14px',
-                        fontSize: '13px', lineHeight: '1.55',
-                        color: 'rgba(240,238,255,0.9)',
-                      }}>
-                        {turn.userResponse}
-                      </div>
-                      <span style={{
-                        display: 'inline-flex', alignItems: 'center', gap: '5px',
-                        padding: '3px 11px', borderRadius: '20px',
-                        fontSize: '11px', fontWeight: 600, letterSpacing: '0.04em',
-                        background: cfg.bg, border: `1px solid ${cfg.border}`, color: cfg.text,
-                      }}>
-                        {cfg.icon} {cfg.label.toUpperCase()}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Feedback blocks with reflection textareas */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    {FEEDBACK_BLOCKS.map(block => (
-                      <FeedbackBlock
-                        key={block.key}
-                        icon={block.icon}
-                        title={block.title}
-                        content={turn.analysis.feedback[block.key]}
-                        colorBg={block.color}
-                        colorBorder={block.border}
-                        colorText={block.text}
-                        placeholder={block.placeholder}
-                        value={r[block.key]}
-                        onChange={v => setField(turn.turnIndex, block.key, v)}
-                      />
-                    ))}
-
-                    {/* Alternative response inline */}
+                  <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '6px' }}>
                     <div style={{
-                      background: 'rgba(99,102,241,0.07)',
-                      border: '1px solid rgba(99,102,241,0.22)',
-                      borderRadius: '14px',
-                      padding: '13px 14px',
+                      maxWidth: '85%',
+                      background: 'rgba(240,238,255,0.06)',
+                      border: '1px solid rgba(240,238,255,0.1)',
+                      borderRadius: '14px 14px 14px 3px',
+                      padding: '8px 12px',
+                      fontSize: '12.5px', lineHeight: '1.55',
+                      color: 'rgba(240,238,255,0.75)',
+                      fontStyle: 'italic',
                     }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '7px', marginBottom: '8px' }}>
-                        <span style={{ fontSize: '13px' }}>✨</span>
-                        <span style={{
-                          fontSize: '11px', fontWeight: 600,
-                          textTransform: 'uppercase', letterSpacing: '0.05em', color: '#a5b4fc',
-                        }}>
-                          Una risposta che apriva
-                        </span>
-                      </div>
-                      <p style={{
-                        fontSize: '12.5px', lineHeight: '1.65',
-                        color: 'rgba(240,238,255,0.82)', margin: 0, fontStyle: 'italic',
-                      }}>
-                        &ldquo;{turn.analysis.alternativeResponse}&rdquo;
-                      </p>
-                      {turn.analysis.whyAlternativeWorks && (
-                        <p style={{
-                          fontSize: '11.5px', lineHeight: '1.55',
-                          color: 'rgba(240,238,255,0.45)', margin: '7px 0 0',
-                        }}>
-                          {turn.analysis.whyAlternativeWorks}
-                        </p>
-                      )}
+                      {turn.otherPersonMessage}
                     </div>
                   </div>
-
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '5px' }}>
+                    <div style={{
+                      maxWidth: '85%',
+                      background: 'rgba(100,80,220,0.2)',
+                      border: '1px solid rgba(140,120,255,0.25)',
+                      borderRadius: '14px 14px 3px 14px',
+                      padding: '8px 12px',
+                      fontSize: '12.5px', lineHeight: '1.55',
+                      color: 'rgba(240,238,255,0.88)',
+                    }}>
+                      {turn.userResponse}
+                    </div>
+                    <span style={{
+                      display: 'inline-flex', alignItems: 'center', gap: '4px',
+                      padding: '2px 10px', borderRadius: '20px',
+                      fontSize: '10px', fontWeight: 700, letterSpacing: '0.05em',
+                      background: cfg.bg, border: `1px solid ${cfg.border}`, color: cfg.text,
+                    }}>
+                      {cfg.icon} {cfg.label.toUpperCase()}
+                    </span>
+                  </div>
                 </div>
               )
             })}
           </div>
+
+          {/* ── Divider ── */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.25rem' }}>
+            <div style={{ flex: 1, height: 1, background: 'rgba(240,238,255,0.1)' }} />
+            <span style={{
+              fontSize: '10px', fontWeight: 700, textTransform: 'uppercase',
+              letterSpacing: '0.08em', color: 'rgba(240,238,255,0.35)', whiteSpace: 'nowrap',
+            }}>
+              Riflessione complessiva
+            </span>
+            <div style={{ flex: 1, height: 1, background: 'rgba(240,238,255,0.1)' }} />
+          </div>
+
+          {/* ── 4 unified feedback blocks ── */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '1rem' }}>
+            {FEEDBACK_BLOCKS.map(block => (
+              <FeedbackBlock
+                key={block.key}
+                icon={block.icon}
+                title={block.title}
+                content={feedback[block.key]}
+                colorBg={block.color}
+                colorBorder={block.border}
+                colorText={block.text}
+                placeholder={block.placeholder}
+                value={reflection[block.key]}
+                onChange={v => setField(block.key, v)}
+              />
+            ))}
+
+            {bestAnalysis?.alternativeResponse && (
+              <div style={{
+                background: 'rgba(99,102,241,0.07)',
+                border: '1px solid rgba(99,102,241,0.2)',
+                borderRadius: '14px',
+                padding: '13px 14px',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '7px', marginBottom: '8px' }}>
+                  <span style={{ fontSize: '13px' }}>✨</span>
+                  <span style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#a5b4fc' }}>
+                    Una risposta che apriva
+                  </span>
+                </div>
+                <p style={{ fontSize: '12.5px', lineHeight: '1.65', color: 'rgba(240,238,255,0.82)', margin: 0, fontStyle: 'italic' }}>
+                  &ldquo;{bestAnalysis.alternativeResponse}&rdquo;
+                </p>
+                {bestAnalysis.whyAlternativeWorks && (
+                  <p style={{ fontSize: '11.5px', lineHeight: '1.55', color: 'rgba(240,238,255,0.45)', margin: '6px 0 0' }}>
+                    {bestAnalysis.whyAlternativeWorks}
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
+          <div style={{ height: '0.5rem' }} />
         </div>
 
-        {/* Save CTA */}
         <div style={{ flexShrink: 0, padding: '1.25rem' }}>
           <button className="btn-primary" style={{ width: '100%' }} onClick={handlePrimary}>
             Salva le riflessioni
           </button>
         </div>
-
       </div>
     )
   }
 
   // ── SINGLE RESPONSE MODE ────────────────────────────────────
-  const r = getRef(0)
   return (
-    <div style={{
-      height: '100dvh', overflow: 'hidden',
-      display: 'flex', flexDirection: 'column',
-    }}>
-
-      {/* Header */}
+    <div style={{ height: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
       <div style={{ flexShrink: 0, padding: '2rem 1.25rem 1rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <button className="btn-ghost" style={{ padding: 0, flexShrink: 0 }} onClick={onBack}>
@@ -391,11 +346,7 @@ export default function FeedbackPanel({
           </div>
         </div>
       </div>
-
-      {/* Feedback blocks */}
-      <div style={{
-        flex: 1, overflowY: 'auto', padding: '0 1.25rem',
-      }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '0 1.25rem' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', paddingBottom: '1rem' }}>
           {FEEDBACK_BLOCKS.map(block => (
             <FeedbackBlock
@@ -407,20 +358,17 @@ export default function FeedbackPanel({
               colorBorder={block.border}
               colorText={block.text}
               placeholder={block.placeholder}
-              value={r[block.key]}
-              onChange={v => setField(0, block.key, v)}
+              value={reflection[block.key]}
+              onChange={v => setField(block.key, v)}
             />
           ))}
         </div>
       </div>
-
-      {/* CTA */}
       <div style={{ flexShrink: 0, padding: '1.25rem' }}>
         <button className="btn-primary" style={{ width: '100%' }} onClick={onContinue}>
           Vedi una risposta che apre
         </button>
       </div>
-
     </div>
   )
-}
+      }
