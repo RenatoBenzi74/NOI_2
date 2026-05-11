@@ -1,13 +1,13 @@
 'use client'
 
-import { AnalysisResult, Context, Scenario } from '@/lib/types'
+import { AnalysisResult, Context, ConversationTurn, Scenario } from '@/lib/types'
 import { contextInfo } from '@/lib/scenarios'
 import ListeningAura from './ListeningAura'
 
 interface SummaryScreenProps {
   context: Context
   scenario: Scenario
-  userResponse: string
+  turns: ConversationTurn[]
   analysis: AnalysisResult
   reflection: string
   onRestart: () => void
@@ -15,10 +15,21 @@ interface SummaryScreenProps {
   onHistory: () => void
 }
 
+const stateColors: Record<string, string> = {
+  difesa: '#fca5a5',
+  risposta: '#a5b4fc',
+  curiosità: '#d8b4fe',
+  presenza: '#fcd34d',
+}
+
+const stateLabels: Record<string, string> = {
+  difesa: 'Difesa', risposta: 'Risposta', curiosità: 'Curiosità', presenza: 'Presenza',
+}
+
 export default function SummaryScreen({
   context,
   scenario,
-  userResponse,
+  turns,
   analysis,
   reflection,
   onRestart,
@@ -60,6 +71,32 @@ export default function SummaryScreen({
             "{scenario.quote}"
           </p>
         </div>
+
+        {/* Per-turn recap */}
+        {turns.length > 0 && (
+          <div className="glass-card p-4 space-y-3">
+            <div className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'rgba(240,238,255,0.4)' }}>
+              Come è andata turno per turno
+            </div>
+            {turns.map((turn, i) => {
+              const color = stateColors[turn.analysis.globalState]
+              return (
+                <div key={i} className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="text-xs flex-shrink-0" style={{ color: 'rgba(240,238,255,0.35)' }}>T{i + 1}</span>
+                    <p className="text-xs truncate" style={{ color: 'rgba(240,238,255,0.6)' }}>
+                      {turn.userResponse.substring(0, 60)}{turn.userResponse.length > 60 ? '…' : ''}
+                    </p>
+                  </div>
+                  <span className="flex-shrink-0 text-xs font-semibold px-2 py-0.5 rounded-full"
+                    style={{ color, background: `${color}1a`, border: `1px solid ${color}44` }}>
+                    {stateLabels[turn.analysis.globalState]}
+                  </span>
+                </div>
+              )
+            })}
+          </div>
+        )}
 
         {/* Scores grid */}
         <div className="grid grid-cols-2 gap-2">

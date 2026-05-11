@@ -4,7 +4,7 @@
 // Ogni scenario appartiene a un archetipo relazionale
 // ============================================================
 
-import { Scenario } from './types'
+import { Archetype, Scenario } from './types'
 
 export const scenarios: Scenario[] = [
 
@@ -657,3 +657,52 @@ export const contextInfo = [
     emoji: '🤝',
   },
 ]
+
+// ============================================================
+// Continuazioni per archetipo
+// "closed" = l'altro se si è sentito non ascoltato (difesa/risposta)
+// "open"   = l'altro se si è sentito ascoltato (curiosità/presenza)
+// ============================================================
+
+export const archetypeContinuations: Record<Archetype, { closed: string; open: string }> = {
+  sfiducia: {
+    closed: 'Vedi? È esattamente questo che intendo. Non cambia mai niente.',
+    open: '…non me lo aspettavo. Di solito nessuno se ne accorge davvero.',
+  },
+  accusa_indiretta: {
+    closed: 'Lascia stare. È inutile parlarne.',
+    open: 'Forse ho esagerato. Ma è una cosa che mi porto dietro da un po\'.',
+  },
+  delusione: {
+    closed: 'Non importa. Avrei dovuto saperlo già.',
+    open: 'Che strano sentirsi ascoltati su questo. Non ci ero abituato.',
+  },
+  chiusura: {
+    closed: 'Ok, ho capito. Non ne parliamo più.',
+    open: 'Non lo so neanche io esattamente cosa voglio. Ma grazie per non insistere.',
+  },
+  bisogno_nascosto: {
+    closed: 'Niente, non preoccuparti. Stavo solo pensando ad alta voce.',
+    open: 'Sì, è più o meno quello. Non riuscivo a dirlo in modo diretto.',
+  },
+  conflitto_prospettiva: {
+    closed: 'Vabbè, la vediamo diversamente. Pazienza.',
+    open: 'Ok, capisco il tuo punto. Anche se ancora non sono del tutto d\'accordo.',
+  },
+  richiesta_mascherata: {
+    closed: 'No no, me la cavo da solo. Non serve niente.',
+    open: 'In realtà ci sarebbe una cosa. Ma non sapevo come chiederla.',
+  },
+  resistenza: {
+    closed: 'Ognuno fa come vuole. Io resto sul mio.',
+    open: 'Forse hai ragione che ho reagito così perché non mi è stato chiesto prima.',
+  },
+  silenzio_significativo: {
+    closed: '…',
+    open: 'Non pensavo che qualcuno se ne accorgesse.',
+  },
+  frase_spiazzante: {
+    closed: 'Niente, dimentica. Stavo parlando troppo.',
+    open: 'Sì, è una cosa strana da dire. Ma è quello che sento davvero.',
+  },
+}
