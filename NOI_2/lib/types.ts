@@ -35,6 +35,9 @@ export interface Scenario {
   hiddenTension: string
   possibleTrap: string
   listeningOpportunity: string
+  followUpOpening: string
+  followUpClosing: string
+  withdrawalMessage: string
 }
 
 export interface ContextInfo {
@@ -46,28 +49,37 @@ export interface ContextInfo {
 }
 
 export interface IndicatorScores {
-  stumbleAccepted: number       // Inciampo accolto (0–100)
-  judgmentSuspended: number     // Giudizio sospeso (0–100)
-  activeCuriosity: number       // Curiosità attiva (0–100)
-  presenceOnOther: number       // Presenza sull'altro (0–100)
-  openHorizon: number           // Orizzonte aperto (0–100)
-  correctiveImpulse: number     // Impulso a correggere (0–100, inverso)
+  stumbleAccepted: number
+  judgmentSuspended: number
+  activeCuriosity: number
+  presenceOnOther: number
+  openHorizon: number
+  correctiveImpulse: number
 }
 
 export interface FeedbackBlocks {
-  closure: string               // Dove ti stai chiudendo
-  opening: string               // Dove si intravede apertura
-  unheard: string               // Cosa non hai ancora ascoltato
-  horizon: string               // Come potresti aprire l'orizzonte
+  closure: string
+  opening: string
+  unheard: string
+  horizon: string
 }
 
 export interface AnalysisResult extends IndicatorScores {
   globalState: ListeningState
-  globalStateNuance?: string    // Sfumatura dello stato (es. "Risposta gentile ma chiudente")
+  globalStateNuance?: string
   feedback: FeedbackBlocks
   alternativeResponse: string
   whyAlternativeWorks: string
 }
+
+export interface DialogueTurn {
+  turnIndex: number
+  otherPersonMessage: string
+  userResponse: string
+  analysis: AnalysisResult
+}
+
+export type DialogueEndReason = 'resolved' | 'closed' | 'timeout'
 
 export interface SavedExperience {
   id: string
@@ -77,6 +89,8 @@ export interface SavedExperience {
   userResponse: string
   analysis: AnalysisResult
   reflection: string
+  dialogueTurns?: DialogueTurn[]
+  dialogueEndReason?: DialogueEndReason
 }
 
 export type AppScreen =
@@ -91,6 +105,8 @@ export type AppScreen =
   | 'celebration'
   | 'summary'
   | 'history'
+  | 'dialogue'
+  | 'dialogue_end'
 
 export interface AppState {
   screen: AppScreen
@@ -100,4 +116,4 @@ export interface AppState {
   analysisResult: AnalysisResult | null
   reflection: string
   savedExperiences: SavedExperience[]
-}
+  }
