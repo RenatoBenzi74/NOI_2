@@ -22,6 +22,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Senso di esclusione e sfiducia nella possibilità di incidere davvero sul gruppo',
     possibleTrap: 'Rassicurare, spiegare che non è vero, difendere il gruppo o riportare subito al compito',
     listeningOpportunity: 'Esplorare quando e come la persona ha percepito di non avere spazio reale',
+    followUpOpening: 'Sì... è da mesi che lo sento. Propongo cose, ma poi si fa sempre come ha deciso qualcun altro. Mi sono stancata di provarci.',
+    followUpClosing: 'No, lascia stare. Non cambia niente comunque.',
+    withdrawalMessage: 'Sai cosa, lascia perdere. Non è il momento.',
   },
 
   {
@@ -34,6 +37,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Bisogno di riconoscimento e stanchezza da un supporto percepito come assente',
     possibleTrap: 'Difendersi, giustificarsi, elencare le volte in cui si è aiutato',
     listeningOpportunity: 'Esplorare cosa si aspettava e in quale momento si è sentito lasciato solo',
+    followUpOpening: 'L\'ultimo progetto... ho fatto tutto da solo. Nessuno si è offerto, nessuno ha chiesto. È come se ci si aspettasse che io ce la facessi sempre.',
+    followUpClosing: 'Vabbè, non è un problema tuo. Ci penso io come al solito.',
+    withdrawalMessage: 'Niente, dimentica. Non volevo nemmeno tirarlo fuori.',
   },
 
   {
@@ -46,6 +52,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Frustrazione accumulata e sensazione che il proprio lavoro non sia valorizzato o considerato',
     possibleTrap: 'Difendersi spiegando le proprie ragioni, contrattaccare, razionalizzare',
     listeningOpportunity: 'Esplorare cosa è successo davvero e perché si sente non considerato',
+    followUpOpening: 'Non è solo questa volta. Da mesi ho l\'impressione che quello che faccio non venga visto finché qualcosa non si rompe. È frustrante.',
+    followUpClosing: 'Lascia stare, ti ho già detto quello che penso.',
+    withdrawalMessage: 'Non ha senso continuare questa conversazione adesso.',
   },
 
   {
@@ -58,6 +67,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Senso di invisibilità ricorrente, fatica che si accumula senza essere vista',
     possibleTrap: 'Analizzare il problema pratico, dare soluzioni, normalizzare dicendo che è normale',
     listeningOpportunity: 'Esplorare cosa significa quel "ogni volta", cosa porta dentro di sé',
+    followUpOpening: 'Dico qualcosa, e sembra che nessuno senta. Oppure lo sente, ma poi si va avanti come se non avessi parlato. È come urlare in una stanza vuota.',
+    followUpClosing: 'Vabbè, fa niente. Non volevo lamentarmi.',
+    withdrawalMessage: 'Lascia perdere, adesso non ho voglia.',
   },
 
   {
@@ -70,6 +82,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Paura di perdere competenza, identità o controllo in un cambiamento non scelto',
     possibleTrap: 'Spiegare perché il nuovo metodo è meglio, convincere con dati, sminuire le obiezioni',
     listeningOpportunity: 'Esplorare cosa teme di perdere nel cambiamento e cosa valeva per lui del vecchio modo',
+    followUpOpening: 'Ho passato anni a costruire un modo di lavorare che funziona. Non è pigrizia — è che nessuno ha chiesto cosa si rischia di perdere con questo cambiamento.',
+    followUpClosing: 'Ho detto quello che penso. Poi fate come volete.',
+    withdrawalMessage: 'Non ho altro da aggiungere.',
   },
 
   {
@@ -82,6 +97,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Delusione verso una figura di riferimento che si credeva alleata',
     possibleTrap: 'Giustificarsi spiegando i vincoli, minimizzare la sua delusione, passare subito alle soluzioni',
     listeningOpportunity: 'Riconoscere il peso di quella aspettativa e esplorare cosa rappresentava per lui quel progetto',
+    followUpOpening: 'Quel progetto era la prima cosa in cui mi ero messo davvero. Mi sembrava che avesse senso, che potesse cambiare qualcosa. E invece.',
+    followUpClosing: 'Non importa. Tanto è fatta.',
+    withdrawalMessage: 'Ho bisogno di un po\' di spazio, adesso.',
   },
 
   {
@@ -94,6 +112,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Disinvestimento, sensazione che la propria voce non cambi nulla',
     possibleTrap: 'Ignorare il sottotesto, procedere con la riunione, chiedere conferma formale',
     listeningOpportunity: 'Fermarsi sul "già deciso" e esplorare quando ha avuto questa sensazione',
+    followUpOpening: 'C\'è stato un momento, due settimane fa, in cui avevo detto esattamente quello che poi avete deciso. Ma è sembrato che nessuno l\'avesse sentito. Poi lo ha riproposto qualcun altro e tutti d\'accordo.',
+    followUpClosing: 'No, sul serio, fate pure. Non è un problema.',
+    withdrawalMessage: 'Lasciamo perdere, continuate voi.',
   },
 
   {
@@ -106,6 +127,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Bisogno di essere ascoltato davvero, non solo sentito',
     possibleTrap: 'Difendersi dicendo che stava ascoltando, razionalizzare, risentirsi',
     listeningOpportunity: 'Raccogliere quella frase come un invito a capire dove si è persa la connessione',
+    followUpOpening: 'È che quando ti parlo ho sempre la sensazione che tu stia già pensando a cosa rispondere. Non sei cattivo — ma mi sento come se stessi parlando a qualcuno che aspetta la sua battuta.',
+    followUpClosing: 'No, niente. Non riesco a spiegarlo meglio.',
+    withdrawalMessage: 'Va bene, lasciamo perdere.',
   },
 
   // ============================================================
@@ -122,6 +146,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Bisogno di connessione nascosto dietro la chiusura, timore del giudizio',
     possibleTrap: 'Insistere, rassicurare che capirebbe, offendersi, spiegare quanto ci tiene',
     listeningOpportunity: 'Stare nella porta aperta senza forzarla, riconoscere la distanza senza ampliarla',
+    followUpOpening: 'A scuola c\'è una situazione... con alcuni del gruppo. Non so, mi sento fuori posto. Come se non ci appartenessi davvero.',
+    followUpClosing: 'No dai, non voglio parlarne. Davvero.',
+    withdrawalMessage: 'Vado in camera, ok?',
   },
 
   {
@@ -134,6 +161,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Stanchezza da carico non riconosciuto, bisogno di essere visto in quello che porta',
     possibleTrap: 'Difendersi, elencare le proprie responsabilità, smontare la sua percezione',
     listeningOpportunity: 'Riconoscere quanto pesa quel carico prima di qualsiasi altra cosa',
+    followUpOpening: 'Non è solo questa volta. È che quando c\'è qualcosa da fare, so già che toccherà a me. E non lo dico per accusarti — è solo che alla lunga pesa, sai?',
+    followUpClosing: 'Vabbè, non importa. Ci penso io come sempre.',
+    withdrawalMessage: 'Lascia perdere, non serviva dirlo.',
   },
 
   {
@@ -146,6 +176,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Senso di essere diventata superflua, bisogno di sentirsi ancora necessaria',
     possibleTrap: 'Rassicurarla rapidamente dicendo che non è vero, passare ad altro, non cogliere il sottotesto',
     listeningOpportunity: 'Esplorare cosa sta vivendo in quel momento nella sua vita, cosa le manca davvero',
+    followUpOpening: 'Prima ero quella che sistemava le cose, quella che serviva. Adesso... non lo so. Mi sento un po\' come un accessorio, ecco. È strano da dire.',
+    followUpClosing: 'No no, stavo solo parlando. Non ci fare caso.',
+    withdrawalMessage: 'Dai, ti ho già detto troppo. Buona serata.',
   },
 
   {
@@ -158,6 +191,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Senso che la coppia venga messa sempre in secondo piano rispetto alle famiglie di origine',
     possibleTrap: 'Difendere la propria famiglia, spiegare che non è giusto come la vede, discutere dei fatti',
     listeningOpportunity: 'Esplorare cosa vuol dire "noi" per il partner e quando ha avuto la sensazione che venisse dopo',
+    followUpOpening: 'Voglio solo sentire che siamo una cosa sola, che quando si deve scegliere la scelta parte da noi due. Non da fuori. Non sempre dall\'altra parte.',
+    followUpClosing: 'Lascia stare, non voglio litigare ancora.',
+    withdrawalMessage: 'Non adesso. Domani ne parliamo.',
   },
 
   {
@@ -170,6 +206,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Nostalgia di una relazione che sente perduta, paura di non essere più vicini',
     possibleTrap: 'Spiegare perché è cambiato, giustificare la distanza con il lavoro o il tempo',
     listeningOpportunity: 'Stare in quella sensazione con lui senza spiegarla via, esplorare quando è cominciata',
+    followUpOpening: 'C\'era un periodo in cui tornavi e mi raccontavi tutto. I problemi al lavoro, gli amici, le cose che ti pesavano. Adesso non so più niente di te. E mi manca.',
+    followUpClosing: 'No, niente. Lascia stare, stavo pensando ad alta voce.',
+    withdrawalMessage: 'Vai, non trattenerti per me.',
   },
 
   {
@@ -182,6 +221,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Stanchezza da tentativi falliti, rassegnazione come protezione dalla delusione',
     possibleTrap: 'Contraddirlo, convincerlo che questa volta sarà diverso, elencare argomenti',
     listeningOpportunity: 'Esplorare quante volte si è aspettato un cambiamento che non è arrivato',
+    followUpOpening: 'Ho provato tante volte. Ci credevo davvero. Poi ogni volta finiva nello stesso modo — tutti d\'accordo a parole, e poi niente cambiava. A un certo punto smetti di sperare.',
+    followUpClosing: 'Lo so già come va a finire. Non voglio ricominciare.',
+    withdrawalMessage: 'Non ho voglia di parlarne adesso.',
   },
 
   {
@@ -194,6 +236,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Solitudine e bisogno di presenza mascherati da autonomia',
     possibleTrap: 'Prendere la frase alla lettera, rassicurarla che stanno bene, parlare di logistica',
     listeningOpportunity: 'Cogliere cosa c\'è sotto quella dichiarazione di autonomia e stare in quel spazio',
+    followUpOpening: 'Le giornate sono lunghe, sai. Tuo padre dorme molto, io guardo la tv. Quando venite voi è diverso. La casa sembra viva. Poi ripartite e torna il silenzio.',
+    followUpClosing: 'No no, davvero, non preoccuparti. Ce la caviamo.',
+    withdrawalMessage: 'Il caffè è pronto, siediti.',
   },
 
   {
@@ -206,6 +251,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Bisogno di presenza piena, non solo fisica',
     possibleTrap: 'Difendersi, spiegare quanto si lavora, sentirsi attaccato',
     listeningOpportunity: 'Riconoscere quella osservazione come un dono e chiedergli di più',
+    followUpOpening: 'È che quando ti parlo, a volte hai quella faccia... come quando stai pensando al lavoro. Non è una critica. Voglio solo che tu sia qui, con me.',
+    followUpClosing: 'Niente, lascia perdere. Guarda il film.',
+    withdrawalMessage: 'Non importa, dimentica.',
   },
 
   // ============================================================
@@ -222,6 +270,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Delusione da assenza percepita, bisogno di sentirsi importante per l\'amico',
     possibleTrap: 'Giustificarsi con gli impegni, spiegare perché non ha scritto, ribaltare la questione',
     listeningOpportunity: 'Riconoscere il peso di quella attesa senza difendersi',
+    followUpOpening: 'Ho passato un periodo di merda. E ho aspettato che qualcuno si facesse vivo, senza scriverlo. Forse è stupido, ma speravo fossi tu.',
+    followUpClosing: 'No, lascia stare. Non importa più.',
+    withdrawalMessage: 'Ok, capito. A presto.',
   },
 
   {
@@ -234,6 +285,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Dolore nascosto che non si sente abbastanza al sicuro per uscire',
     possibleTrap: 'Rispettare troppo presto il confine senza lasciare uno spazio aperto',
     listeningOpportunity: 'Stare vicino senza insistere, lasciare una porta aperta senza forzarla',
+    followUpOpening: 'Sto attraversando una cosa con [lui/lei], ma non so ancora cosa penso io. Ho paura di dirlo ad alta voce, perché poi diventa reale.',
+    followUpClosing: 'No, davvero, non voglio stasera. Un\'altra volta.',
+    withdrawalMessage: 'Lasciamo perdere, dai. Ordiniamo.',
   },
 
   {
@@ -246,6 +300,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Solitudine profonda, sensazione che nessuno sia davvero presente',
     possibleTrap: 'Sentirsi offesi, difendersi, dimostrare che si è interessati elencando le volte passate',
     listeningOpportunity: 'Riconoscere quella accusa come un grido mascherato e restare in ascolto',
+    followUpOpening: 'Ultimamente mi sento molto solo. Non ho voglia di niente, non mi faccio vivo con nessuno. E quando qualcuno chiede, dico che sto bene perché non so nemmeno da dove cominciare.',
+    followUpClosing: 'No, dimentica. Non volevo farne un caso.',
+    withdrawalMessage: 'Lascia perdere. Ci sentiamo.',
   },
 
   {
@@ -258,6 +315,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Sensazione che la propria sofferenza sia stata sminuita o non vista',
     possibleTrap: 'Spiegare che non era sua intenzione, minimizzare, razionalizzare cosa è successo',
     listeningOpportunity: 'Accogliere quella differenza di vissuto senza negarla, esplorare cosa ha ferito davvero',
+    followUpOpening: 'Non era solo quella cosa. Era la sensazione che nessuno se ne fosse accorto, che avessi dovuto fare finta di stare bene. Quella parte mi ha pesato più di tutto.',
+    followUpClosing: 'No, non voglio riaprirlo adesso.',
+    withdrawalMessage: 'Lasciamo perdere. Non ne vale la pena.',
   },
 
   {
@@ -270,6 +330,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Nostalgia dell\'amicizia passata, possibile senso di abbandono o distanza',
     possibleTrap: 'Difendersi spiegando i propri cambiamenti, chiudersi, rispondere con ironia',
     listeningOpportunity: 'Esplorare cosa sente cambiato in lui, cosa stava bene prima e cosa manca ora',
+    followUpOpening: 'Prima ci si vedeva ogni settimana, ci si raccontava tutto. Adesso siamo qui e mi sembra di parlare con qualcuno che conosco appena. Mi manca come eravamo.',
+    followUpClosing: 'No, niente. Stavo solo parlando.',
+    withdrawalMessage: 'Lascia perdere, era solo un\'osservazione.',
   },
 
   {
@@ -282,6 +345,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Ferita da abbandoni passati che ora proietta sul presente',
     possibleTrap: 'Prometterle che non succederà, difendersi, insistere sul proprio interesse',
     listeningOpportunity: 'Esplorare da dove viene quella aspettativa di abbandono, cosa ha vissuto prima',
+    followUpOpening: 'Ho avuto un\'amica con cui ero molto vicina. Quando le cose si sono fatte difficili per me, si è allontanata. Pian piano, senza dirmi niente. Da allora faccio fatica a fidarmi.',
+    followUpClosing: 'No, non voglio tornare su quelle cose. Lascia stare.',
+    withdrawalMessage: 'Ok, grazie comunque. Ci vediamo.',
   },
 
   {
@@ -294,6 +360,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Possibile distanza, senso di esclusione pregressa, o semplice disinvestimento nel gruppo',
     possibleTrap: 'Ignorare il tono, prendere la risposta alla lettera, procedere senza fermarsi',
     listeningOpportunity: 'Cogliere il non detto e aprire uno spazio per parlare davvero',
+    followUpOpening: 'L\'ultima volta mi sono sentito un po\' ai margini, come se fossi lì ma non facessi davvero parte del gruppo. Non so se è una mia cosa o se è reale.',
+    followUpClosing: 'No, è tutto a posto. Fammi sapere.',
+    withdrawalMessage: 'Ok, a presto.',
   },
 
   {
@@ -306,6 +375,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Bisogno di connessione e presenza mascherato da considerazione per l\'altro',
     possibleTrap: 'Rispondere con un messaggio veloce e rimandare, prendere la frase alla lettera',
     listeningOpportunity: 'Cogliere che non stava scrivendo per te, stava cercando te',
+    followUpOpening: 'In realtà ho un casino in testa. Ho scritto a te perché... non lo so, mi fido. Ma poi ho avuto paura di pesare.',
+    followUpClosing: 'No, davvero, non preoccuparti. Ci sentiamo con calma.',
+    withdrawalMessage: 'Ok, a presto allora.',
   },
 
   // ============================================================
@@ -322,6 +394,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Bisogno di essere visto e di presenza, non di cibo',
     possibleTrap: 'Rispondere al contenuto letterale, decidere per conto proprio, ignorare il tono',
     listeningOpportunity: 'Riconoscere che dietro "non voglio niente" c\'è qualcosa che chiede attenzione',
+    followUpOpening: 'Oggi è stata una giornata di merda. Non voglio risolvere niente. Voglio solo che tu stia qui un attimo con me, senza fare niente.',
+    followUpClosing: 'No, davvero, non è niente. Mangia tu.',
+    withdrawalMessage: 'Vado a sdraiarmi un po\'.',
   },
 
   {
@@ -334,6 +409,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Frustrazione accumulata per sentirsi escluso o non considerato nelle scelte',
     possibleTrap: 'Difendersi, elencare le volte in cui lo si è coinvolto, far diventare una discussione',
     listeningOpportunity: 'Esplorare quando ha avuto questa sensazione e cosa significa per lui/lei',
+    followUpOpening: 'Non è solo questa decisione. È che a volte mi sento come un accessorio. Come se le cose importanti le decidessi già prima, e io venissi informato dopo.',
+    followUpClosing: 'Lascia stare, non è il momento.',
+    withdrawalMessage: 'Non voglio continuare adesso.',
   },
 
   {
@@ -346,6 +424,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Dolore da incomprensione sentita come cronica, non solo episodica',
     possibleTrap: 'Difendersi, riportare episodi positivi, razionalizzare',
     listeningOpportunity: 'Stare in quel dolore con lui/lei senza uscirne troppo presto',
+    followUpOpening: 'Non è solo questa lite. È che a volte quando parli mi rendo conto che non sai davvero cosa provo. E non per mancanza di amore — è che non mi chiedi mai com\'è per me dentro, davvero.',
+    followUpClosing: 'Non voglio discutere ancora. Sono stanca.',
+    withdrawalMessage: 'Ho bisogno di stare un po\' da sola.',
   },
 
   {
@@ -358,6 +439,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Sensazione di essere sistematicamente messo in secondo piano',
     possibleTrap: 'Difendersi elencando le attenzioni passate, minimizzare l\'episodio',
     listeningOpportunity: 'Riconoscere il pattern che lui/lei sta descrivendo, non solo l\'episodio singolo',
+    followUpOpening: 'Non è solo questa volta. È che quando dico qualcosa, sento che passa come se non l\'avessi detto. Come se quello che mi sta a cuore non fosse degno di attenzione.',
+    followUpClosing: 'Lascia perdere. Non è il caso.',
+    withdrawalMessage: 'Ok. Dimentichiamo.',
   },
 
   {
@@ -370,6 +454,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Stanchezza da conversazioni che sembrano girare in tondo senza esito',
     possibleTrap: 'Convincerlo/la che questa volta sarà diverso, insistere sul dialogo come soluzione',
     listeningOpportunity: 'Riconoscere la sua stanchezza prima di aprire la conversazione che hai in mente',
+    followUpOpening: 'Ogni volta parliamo, e per un po\' sembra che vada meglio. Poi ricominciamo daccapo. Sono stanca di avere le stesse conversazioni senza che cambi niente in fondo.',
+    followUpClosing: 'Non ho voglia di cominciare un\'altra serata così.',
+    withdrawalMessage: 'Non adesso. Per favore.',
   },
 
   {
@@ -382,6 +469,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Disallineamento nella percezione del peso relazionale degli eventi',
     possibleTrap: 'Cercare di stabilire chi ha ragione sulla versione dei fatti',
     listeningOpportunity: 'Esplorare cosa ha reso quella goccia così pesante per lui/lei',
+    followUpOpening: 'Non era quella lite specifica. Era che in quel momento ho realizzato che portavo tutto dentro da molto tempo, senza dirlo. E lì è venuto fuori tutto insieme.',
+    followUpClosing: 'Non voglio riaprirlo adesso. È già troppo.',
+    withdrawalMessage: 'Lasciamo stare. È andata.',
   },
 
   {
@@ -394,6 +484,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Bisogno di presenza piena, connessione emotiva, non solo convivenza',
     possibleTrap: 'Difendersi, elencare le cose fatte insieme, non cogliere la profondità della domanda',
     listeningOpportunity: 'Raccogliere quella domanda come un invito a guardarsi e a stare davvero lì',
+    followUpOpening: 'Voglio che ci stiamo davvero, non solo che condividiamo lo stesso spazio. A volte ho l\'impressione che siamo due isole vicine, ma ognuno nella sua.',
+    followUpClosing: 'No, dimentica. Non volevo creare un casino.',
+    withdrawalMessage: 'Va bene così. Buonanotte.',
   },
 
   {
@@ -406,6 +499,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Protezione da una delusione che si vuole evitare abbassando le aspettative',
     possibleTrap: 'Promettere di fare meglio, difendersi, portare argomenti razionali',
     listeningOpportunity: 'Stare in quella frase con lui/lei, esplorare cosa aveva creduto e cosa ha perso',
+    followUpOpening: 'Avevo riposto molte speranze in quella cosa. Quando non è andata come speravo... mi sono sentita stupida per aver creduto che sarebbe stato diverso questa volta.',
+    followUpClosing: 'No, non voglio ricominciare a sperare. Non adesso.',
+    withdrawalMessage: 'Lasciamo perdere. È già tardi.',
   },
 
   // ============================================================
@@ -422,6 +518,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Senso che il gruppo non sia reale, che la collaborazione sia di facciata',
     possibleTrap: 'Difendere il gruppo, spiegare i risultati ottenuti, razionalizzare il senso di appartenenza',
     listeningOpportunity: 'Esplorare quando ha avuto questa sensazione e cosa si aspettava da un gruppo vero',
+    followUpOpening: 'Quando mi immagino un gruppo che funziona davvero, vedo persone che si dicono le cose difficili, che dissentono ma si rispettano. Qui invece c\'è sempre questa cortesia superficiale che non porta da nessuna parte.',
+    followUpClosing: 'No, lasciate perdere. Era solo uno sfogo.',
+    withdrawalMessage: 'Continuate pure voi.',
   },
 
   {
@@ -434,6 +533,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Percezione di una gerarchia informale che esclude le voci meno potenti',
     possibleTrap: 'Difendere il processo decisionale, spiegare che tutti contano uguale',
     listeningOpportunity: 'Esplorare quando si è sentita meno ascoltata e in quale dinamica si è vissuta come esclusa',
+    followUpOpening: 'L\'ultima riunione. Ho detto qualcosa, è rimasto lì. Poi lo ha detto qualcun altro con più autorevolezza e tutti d\'accordo. Non è la prima volta.',
+    followUpClosing: 'No, lascia stare. Dico la mia e basta.',
+    withdrawalMessage: 'Ok, ho capito. Andiamo avanti.',
   },
 
   {
@@ -446,6 +548,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Disinvestimento da un gruppo che non ha saputo tenerla/lo dentro',
     possibleTrap: 'Ignorare, prendere la risposta alla lettera, procedere senza fermarsi sul significato',
     listeningOpportunity: 'Fermarsi su quel "più" — quando ha smesso di interessargli e perché',
+    followUpOpening: 'C\'era un momento in cui ci credevo davvero. Poi ho visto come sono andate alcune cose e ho capito che non era quello che pensavo. Da lì ho smesso di investire.',
+    followUpClosing: 'Non voglio ripartire adesso. Ho già dato.',
+    withdrawalMessage: 'Fate pure. Non mi coinvolgete.',
   },
 
   {
@@ -458,6 +563,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Bisogno di riconoscimento e appartenenza che non trova risposta nel gruppo',
     possibleTrap: 'Elencare i contributi che ha dato, rassicurarlo che vale, risolvere con complimenti',
     listeningOpportunity: 'Esplorare come si è sentito nelle dinamiche del gruppo, non valutarne il contributo',
+    followUpOpening: 'Non è solo il lavoro. È la sensazione di non essere visto come persona. Di contare solo per quello che produco. E quando quello passa inosservato, mi chiedo se valga la pena stare qui.',
+    followUpClosing: 'No, dai, è una cosa mia. Non preoccuparti.',
+    withdrawalMessage: 'Vai, non voglio trattenerti.',
   },
 
   {
@@ -470,6 +578,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Diversità di valori e stili di lavoro vissuta come incompatibilità',
     possibleTrap: 'Difendere il metodo del gruppo, spiegare i vantaggi, scegliere un lato',
     listeningOpportunity: 'Esplorare cosa significa "direzione" per chi parla e cosa teme nella confusione',
+    followUpOpening: 'Per me funzionare in modo efficace significa sapere dove si va. Quando tutto è aperto e fluido, mi perdo. Non riesco a dare il meglio se non so qual è il punto d\'arrivo.',
+    followUpClosing: 'Vabbè, proviamo. Non mi convincete, ma proviamo.',
+    withdrawalMessage: 'Ok. Fate come volete.',
   },
 
   {
@@ -482,6 +593,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Bisogno di stabilità e prevedibilità, paura del caos relazionale del cambiamento',
     possibleTrap: 'Spiegare perché il nuovo approccio è meglio, soverchiare con argomenti',
     listeningOpportunity: 'Esplorare cosa ha investito nel percorso precedente e cosa rischia di perdere',
+    followUpOpening: 'Ho investito molto in questo percorso. Non è comodità — è che cambiare rotta adesso significa ammettere che quello che abbiamo fatto finora non valeva. E non è così.',
+    followUpClosing: 'Ho detto la mia. Non cambio idea.',
+    withdrawalMessage: 'Andiamo avanti. Votate come volete.',
   },
 
   {
@@ -494,6 +608,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Delusione da un ideale di gruppo che non si è realizzato',
     possibleTrap: 'Difendere il gruppo, elencare i risultati, minimizzare l\'aspettativa come ingenua',
     listeningOpportunity: 'Esplorare che tipo di gruppo si immaginava e dove ha sentito la differenza',
+    followUpOpening: 'Mi immaginavo un posto dove si potesse dire le cose difficili senza paura. Dove non ci fosse bisogno di fare bella figura. Invece anche qui, alla fine, ci si muove in punta di piedi.',
+    followUpClosing: 'Forse mi aspettavo troppo. Lascia stare.',
+    withdrawalMessage: 'Ok, è tardi. Ci vediamo la prossima volta.',
   },
 
   {
@@ -506,6 +623,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Ritiro come forma di autodifesa, sensazione che lo spazio non sia sicuro',
     possibleTrap: 'Forzare la partecipazione, rassicurare in modo generico, ignorare il ritiro',
     listeningOpportunity: 'Esplorare con delicatezza cosa intende con "ho già capito com\'è andata"',
+    followUpOpening: 'Ho capito che certe voci hanno più spazio di altre. E ho imparato che quando parlo, spesso non cambia niente. Quindi sto zitta e osservo. È più onesto.',
+    followUpClosing: 'No, non ho altro da aggiungere.',
+    withdrawalMessage: 'Grazie. Preferisco così.',
   },
 
   // ============================================================
@@ -522,6 +642,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Sfiducia costruita da esperienze passate deludenti con altri fornitori',
     possibleTrap: 'Difendere la propria azienda, spiegare perché loro sono diversi, caricare di garanzie',
     listeningOpportunity: 'Esplorare cosa è successo nelle esperienze precedenti, cosa ha deluso davvero',
+    followUpOpening: 'L\'ultima volta ho investito molto su un fornitore che prometteva esattamente quello che promette lei. Sei mesi dopo eravamo daccapo. Il danno non era solo economico — ho dovuto rispondere io internamente.',
+    followUpClosing: 'Capisce che faccio fatica a fidarmi.',
+    withdrawalMessage: 'Le farò sapere. Ho bisogno di pensarci.',
   },
 
   {
@@ -534,6 +657,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Possibile paura di sbagliare scelta, difficoltà a percepire il valore differenziale',
     possibleTrap: 'Giustificare il prezzo, sminuire il competitor, fare subito uno sconto',
     listeningOpportunity: 'Esplorare cosa ha visto nelle altre offerte e cosa teme di perdere o di pagare troppo',
+    followUpOpening: 'Il problema non è solo il prezzo. È che devo giustificarlo internamente. Se scelgo qualcosa di più costoso, devo avere argomenti solidi da portare al mio responsabile. E non sono sicuro di averli.',
+    followUpClosing: 'Guardi, mi faccia avere qualcosa di scritto e ci penso.',
+    withdrawalMessage: 'Le faccio sapere io. Grazie.',
   },
 
   {
@@ -546,6 +672,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Paura di prendere una decisione sbagliata, bisogno di rassicurazione non ancora dato',
     possibleTrap: 'Spingere, portare argomenti, chiedere direttamente cosa blocca con tono tecnico',
     listeningOpportunity: 'Esplorare cosa non è ancora chiaro per lui e cosa lo farebbe sentire pronto',
+    followUpOpening: 'Ho preso una decisione simile due anni fa e ho sbagliato. Non voglio ripetere lo stesso errore. Non è che non mi fido — è che ho bisogno di sentirmi sicuro prima di firmare.',
+    followUpClosing: 'Dammi qualche giorno. Ti faccio sapere.',
+    withdrawalMessage: 'Ti contatto io. Grazie.',
   },
 
   {
@@ -558,6 +687,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Bisogno di relazione e riconoscimento che non si sente soddisfatto',
     possibleTrap: 'Rispondere al problema tecnico, offrire upgrade, giustificare il servizio passato',
     listeningOpportunity: 'Esplorare in quali momenti si è sentito non visto o non considerato come cliente',
+    followUpOpening: 'Ogni volta che avevamo un problema, dovevamo inseguire qualcuno. Nessuno si è mai fatto vivo spontaneamente per chiedere come stava andando. Piccola cosa, forse — ma per noi conta.',
+    followUpClosing: 'Non so se ha senso continuare questa conversazione adesso.',
+    withdrawalMessage: 'Grazie per il tempo. Ci pensiamo.',
   },
 
   {
@@ -570,6 +702,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Sensazione di essere usato come cliente senza una relazione vera',
     possibleTrap: 'Difendere il servizio, citare ticket gestiti, spiegare i processi interni',
     listeningOpportunity: 'Riconoscere il pattern che descrive e esplorare cosa avrebbe voluto di diverso',
+    followUpOpening: 'Quello che vorrei è sentire che ci siete anche quando non c\'è niente da vendere. Una chiamata ogni tanto per capire come stiamo. Non aspettare che sia noi a cercarvi.',
+    followUpClosing: 'Vediamo come va nei prossimi mesi.',
+    withdrawalMessage: 'Ok, grazie. Ci aggiorniamo.',
   },
 
   {
@@ -582,6 +717,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Disallineamento tra aspettativa di cambiamento reale e logica di delivery',
     possibleTrap: 'Difendere il metodo di lavoro, spiegare la propria metrica, proporre un compromesso tecnico',
     listeningOpportunity: 'Esplorare cosa significa "cambiare le cose davvero" per il cliente e cosa teme non cambi',
+    followUpOpening: 'Ho visto troppi progetti consegnati in tempo che non hanno cambiato niente. Alla fine l\'organizzazione era uguale a prima. Quello che mi interessa è che dopo questo lavoro le persone si comportino in modo diverso.',
+    followUpClosing: 'Se non siamo allineati su questo, non so se ha senso continuare.',
+    withdrawalMessage: 'Dobbiamo fermarci qui. Ci ripensiamo.',
   },
 
   {
@@ -594,6 +732,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Gap tra aspettativa implicita non espressa e risultato consegnato',
     possibleTrap: 'Difendere il lavoro fatto, citare il brief, chiedere cosa non va in modo tecnico',
     listeningOpportunity: 'Esplorare cosa aveva in mente, anche se non lo sa dire, con domande aperte',
+    followUpOpening: 'Avevo in testa qualcosa di più... non so, vivo? Qualcosa che comunicasse chi siamo davvero. Questo è corretto, professionale — ma non mi rappresenta. Manca qualcosa che non so nominare.',
+    followUpClosing: 'Fammi pensare. Non sono sicuro di saper spiegare cosa voglio.',
+    withdrawalMessage: 'Lasciami qualche giorno. Ti scrivo io.',
   },
 
   {
@@ -606,6 +747,9 @@ export const scenarios: Scenario[] = [
     hiddenTension: 'Bisogno di sentirsi visto come persona con un problema reale, non come opportunità commerciale',
     possibleTrap: 'Difendersi dichiarando di avere a cuore il cliente, elencare referenze',
     listeningOpportunity: 'Riconoscere che quella domanda è legittima ed esplorare quale problema sente ancora inascoltato',
+    followUpOpening: 'Il problema vero è che non sono sicuro che abbiate capito davvero il mio contesto. In questi mesi ho sempre sentito che presentavate la vostra soluzione, non rispondeste alla mia situazione specifica.',
+    followUpClosing: 'Ho bisogno di capire se ha senso andare avanti.',
+    withdrawalMessage: 'Ci penso e ti faccio sapere. Grazie.',
   },
 ]
 
