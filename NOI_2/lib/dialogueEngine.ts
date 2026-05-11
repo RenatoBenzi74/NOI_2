@@ -19,18 +19,21 @@ export function getOtherPersonMessage(
   turnIndex: number,
   previousTurns: DialogueTurn[]
 ): string | null {
+  // Primo turno: usa la citazione originale dello scenario
   if (turnIndex === 0) {
     return scenario.quote
   }
 
   const lastTurn = previousTurns[previousTurns.length - 1]
 
+  // Se non c'è un'analisi precedente, usa il followUpClosing come fallback
   if (!lastTurn) {
     return scenario.followUpClosing
   }
 
   const lastIsGood = RESOLUTION_STATES.includes(lastTurn.analysis.globalState)
 
+  // Al turno 2 con due risposte consecutive scarse → usa withdrawalMessage
   if (turnIndex === 2 && !lastIsGood) {
     const prevTurn = previousTurns[previousTurns.length - 2]
     const prevIsAlsoBad = prevTurn && !RESOLUTION_STATES.includes(prevTurn.analysis.globalState)
@@ -44,6 +47,8 @@ export function getOtherPersonMessage(
 
 /**
  * Determina se il dialogo deve finire dopo questo turno.
+ * Restituisce la ragione o null se il dialogo continua.
+ * Minimo MAX_TURNS battute prima di qualsiasi chiusura.
  */
 export function getEndReason(
   turns: DialogueTurn[],
@@ -51,12 +56,17 @@ export function getEndReason(
 ): DialogueEndReason | null {
   if (turns.length === 0) return null
 
+  // Minimo 3 battute: nessuna chiusura anticipata
+  if (turns.length < MAX_TURNS) return null
+
   const lastTurn = turns[turns.length - 1]
 
+  // Resolved: ultimo turno ha globalState 'curiosità' o 'presenza'
   if (RESOLUTION_STATES.includes(lastTurn.analysis.globalState)) {
     return 'resolved'
   }
 
+  // Closed: due turni consecutivi con globalState 'difesa'
   if (turns.length >= 2) {
     const prevTurn = turns[turns.length - 2]
     if (
@@ -67,6 +77,7 @@ export function getEndReason(
     }
   }
 
+  // Timeout: raggiunto MAX_TURNS senza resolved o closed
   if (currentTurnIndex >= MAX_TURNS - 1) {
     return 'timeout'
   }
@@ -75,7 +86,8 @@ export function getEndReason(
 }
 
 /**
- * Restituisce la migliore analisi tra tutti i turni.
+ * Restituisce la migliore analisi tra tutti i turni (il punteggio più alto).
+ * Il punteggio si basa sull'indice dello stato globale.
  */
 export function getBestAnalysis(turns: DialogueTurn[]): AnalysisResult | null {
   if (turns.length === 0) return null
@@ -118,4 +130,4 @@ export function getEndMessage(endReason: DialogueEndReason): {
         body: "Hai attraversato il dialogo completo. L'altra persona non si è del tutto chiusa, ma non si è nemmeno aperta pienamente. Esplorare il feedback ti aiuterà a capire cosa ha funzionato e cosa potresti portare più in profondità.",
       }
   }
-}
+      }
