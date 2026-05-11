@@ -28,6 +28,7 @@ const CURIOSITY_SIGNALS = [
   /\bda quanto tempo\b/i,
   /\bcosa ti servirebbe\b/i,
   /\bpuoi dirmi di più\b/i,
+  /\bdimmi di più\b/i,
   /\bcome mai\b/i,
   /\bcosa significa per te\b/i,
   /\bcosa ti aspettavi\b/i,
@@ -37,6 +38,16 @@ const CURIOSITY_SIGNALS = [
   /\bin che senso\b/i,
   /\bhm[m]?,?\b/i,
   /\bcurioso[/a]?\b/i,
+  /\bprova a spiegarmi\b/i,
+  /\bspiegami\b/i,
+  /\bcosa hai provato\b/i,
+  /\bcosa provi\b/i,
+  /\bcosa ti ha portato\b/i,
+  /\bcome è andata\b/i,
+  /\be poi\b/i,
+  /\baiutami a capire\b/i,
+  /\bcosa ti manca\b/i,
+  /\bcosa è successo\b/i,
 ]
 
 const PRESENCE_SIGNALS = [
@@ -192,12 +203,12 @@ function hasOpenQuestion(text: string): boolean {
 
 // ============================================================
 // CALCOLO INDICATORI
-// ============================================================
+// ==========================================
 
 function calcActiveCuriosity(text: string): number {
   const curiosityMatches = countMatches(text, CURIOSITY_SIGNALS)
   const openQuestions = hasOpenQuestion(text) ? Math.min(questionCount(text), 3) : 0
-  const base = Math.min(curiosityMatches * 18 + openQuestions * 15, 90)
+  const base = Math.min(curiosityMatches * 18 + openQuestions * 25, 90)
   // Bonus per domande multiple
   const bonus = questionCount(text) > 1 ? 8 : 0
   return Math.min(base + bonus, 100)
@@ -285,7 +296,7 @@ function calcGlobalState(
   }
 
   // CURIOSITÀ
-  if (activeCuriosity >= 45 && judgmentSuspended >= 45) {
+  if (activeCuriosity >= 25 && judgmentSuspended >= 40) {
     if (correctiveImpulse >= 40) {
       return { state: 'curiosità', nuance: 'Curiosità presente ma ancora molto controllo' }
     }
@@ -360,7 +371,6 @@ function generateFeedback(
 
   return { closure, opening, unheard, horizon }
 }
-
 // ============================================================
 // GENERAZIONE RISPOSTA ALTERNATIVA
 // ============================================================
