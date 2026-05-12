@@ -25,7 +25,7 @@ export default function HomeScreen({ onStart, onHistory }: HomeScreenProps) {
           {/* Aura centrale piccola */}
           <div className="absolute inset-2 rounded-2xl"
             style={{ background: 'radial-gradient(circle, rgba(168,85,247,0.4) 0%, transparent 70%)', animation: 'auraBreath1 3s ease-in-out infinite' }} />
-          <span className="relative text-3xl font-bold tracking-tight text-white">N²</span>
+          <span className="relative text-3xl font-bold tracking-tight text-white">Noi²</span>
         </div>
 
         <div className="noi-micro mb-2 tracking-widest uppercase">Metodo delle Competenze Risonanti</div>
