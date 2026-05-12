@@ -86,8 +86,8 @@ const INDICATORS: {
     isInverse: false,
     getInterpretation: (v) =>
       v >= 65 ? 'Hai lasciato che le parole ti raggiungessero davvero, senza neutralizzarle subito.'
-      : v >= 40 ? "Hai in parte accolto ciò che ti ha spiazzato, ma in parte l'hai gestito rapidamente."
-      : 'La risposta mostra che hai elaborato l'inciampo in modo rapido, senza lasciarti toccare.',
+      : v >= 40 ? 'Hai in parte accolto ciò che ti ha spiazzato, ma in parte l\'hai gestito rapidamente.'
+      : 'La risposta mostra che hai elaborato l\'inciampo in modo rapido, senza lasciarti toccare.',
   },
   {
     key: 'judgmentSuspended',
@@ -95,9 +95,9 @@ const INDICATORS: {
     question: 'Hai evitato di classificare o correggere?',
     isInverse: false,
     getInterpretation: (v) =>
-      v >= 65 ? 'Non hai etichettato l'altro né la situazione. Hai mantenuto lo spazio aperto.'
+      v >= 65 ? 'Non hai etichettato l\'altro né la situazione. Hai mantenuto lo spazio aperto.'
       : v >= 40 ? 'Qualche classificazione implicita è emersa, anche se non dominante.'
-      : 'La risposta contiene giudizi o valutazioni sottili che chiudono lo spazio all'altro.',
+      : 'La risposta contiene giudizi o valutazioni sottili che chiudono lo spazio all\'altro.',
   },
   {
     key: 'activeCuriosity',
@@ -105,8 +105,8 @@ const INDICATORS: {
     question: 'Stai esplorando o stai già rispondendo?',
     isInverse: false,
     getInterpretation: (v) =>
-      v >= 65 ? "Stai esplorando il mondo dell'altro invece di concludere o spiegare."
-      : v >= 40 ? 'C'è un inizio di esplorazione, ma la risposta tende ancora verso la conclusione.'
+      v >= 65 ? 'Stai esplorando il mondo dell\'altro invece di concludere o spiegare.'
+      : v >= 40 ? 'C\'è un inizio di esplorazione, ma la risposta tende ancora verso la conclusione.'
       : 'La risposta è più orientata a rispondere e risolvere che a capire cosa sta succedendo.',
   },
   {
@@ -115,8 +115,8 @@ const INDICATORS: {
     question: "La tua attenzione è sull'altro o su di te?",
     isInverse: false,
     getInterpretation: (v) =>
-      v >= 65 ? "La tua attenzione è sul vissuto dell'altro, non sulla tua posizione o reazione."
-      : v >= 40 ? 'Sei in parte sull'altro, in parte ancora sulla tua prospettiva.'
+      v >= 65 ? 'La tua attenzione è sul vissuto dell\'altro, non sulla tua posizione o reazione.'
+      : v >= 40 ? 'Sei in parte sull\'altro, in parte ancora sulla tua prospettiva.'
       : 'La risposta è centrata principalmente su di te, sulla situazione o sulla tua valutazione.',
   },
   {
@@ -126,7 +126,7 @@ const INDICATORS: {
     isInverse: false,
     getInterpretation: (v) =>
       v >= 65 ? 'Stai allargando il campo di possibilità, non restringendolo verso una soluzione.'
-      : v >= 40 ? 'C'è qualche apertura, ma la risposta tende anche a indicare una direzione.'
+      : v >= 40 ? 'C\'è qualche apertura, ma la risposta tende anche a indicare una direzione.'
       : 'La risposta tende a indicare, spiegare o risolvere — chiude più che aprire.',
   },
   {
@@ -135,9 +135,9 @@ const INDICATORS: {
     question: 'Stai aggiustando prima ancora di ascoltare?',
     isInverse: true,
     getInterpretation: (v) =>
-      v >= 65 ? 'La risposta prova a sistemare la situazione prima di aver davvero capito cosa sente l'altro.'
-      : v >= 40 ? 'C'è qualche spinta a risolvere o spiegare, ma non è dominante.'
-      : 'Stai resistendo all'impulso di sistemare — un segnale positivo di ascolto genuino.',
+      v >= 65 ? 'La risposta prova a sistemare la situazione prima di aver davvero capito cosa sente l\'altro.'
+      : v >= 40 ? 'C\'è qualche spinta a risolvere o spiegare, ma non è dominante.'
+      : 'Stai resistendo all\'impulso di sistemare — un segnale positivo di ascolto genuino.',
   },
 ]
 
@@ -176,6 +176,7 @@ function Divider({ label }: { label: string }) {
 }
 
 function ScoreBar({ value, isInverse }: { value: number; isInverse: boolean }) {
+  // For inverse indicators, low value = good (green)
   const effectiveValue = isInverse ? 100 - value : value
   const color = effectiveValue >= 65 ? '#6ee7b7' : effectiveValue >= 40 ? '#fcd34d' : '#fca5a5'
   return (
@@ -344,12 +345,12 @@ export default function FeedbackPanel({
         {/* Scrollable content */}
         <div style={{ flex: 1, overflowY: 'auto', padding: '0 1.25rem' }}>
 
-          {/* Compact exchange list */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginBottom: '0.5rem' }}>
-            {turns.map((turn, i) => {
+          {/* ── Compact exchange list ── */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginBottom: '0.5rem' }}>        {turns.map((turn, i) => {
               const cfg = STATE_CONFIG[turn.analysis.globalState]
               return (
                 <div key={turn.turnIndex}>
+                  {/* Step number */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
                     <div style={{
                       width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
@@ -362,6 +363,8 @@ export default function FeedbackPanel({
                     </div>
                     <div style={{ flex: 1, height: 1, background: 'rgba(240,238,255,0.06)' }} />
                   </div>
+
+                  {/* Other person bubble */}
                   <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '6px' }}>
                     <div style={{
                       maxWidth: '85%',
@@ -376,6 +379,8 @@ export default function FeedbackPanel({
                       {turn.otherPersonMessage}
                     </div>
                   </div>
+
+                  {/* User response + badge */}
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '5px' }}>
                     <div style={{
                       maxWidth: '85%',
@@ -402,7 +407,7 @@ export default function FeedbackPanel({
             })}
           </div>
 
-          {/* 6 indicators section */}
+          {/* ── 6 indicators section ── */}
           {bestAnalysis && (
             <>
               <Divider label="I 6 indicatori del tuo ascolto" />
@@ -418,10 +423,10 @@ export default function FeedbackPanel({
             </>
           )}
 
-          {/* Unified reflection */}
+          {/* ── Unified reflection ── */}
           <Divider label="Riflessione complessiva" />
 
-          {/* 4 unified feedback blocks */}
+          {/* ── 4 unified feedback blocks ── */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '1rem' }}>
             {FEEDBACK_BLOCKS.map(block => (
               <FeedbackBlock
@@ -438,6 +443,7 @@ export default function FeedbackPanel({
               />
             ))}
 
+            {/* Alternative response */}
             {bestAnalysis?.alternativeResponse && (
               <div style={{
                 background: 'rgba(99,102,241,0.07)',
@@ -481,6 +487,7 @@ export default function FeedbackPanel({
   return (
     <div style={{ height: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
 
+      {/* Header */}
       <div style={{ flexShrink: 0, padding: '2rem 1.25rem 1rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <button className="btn-ghost" style={{ padding: 0, flexShrink: 0 }} onClick={onBack}>
@@ -497,6 +504,7 @@ export default function FeedbackPanel({
         </div>
       </div>
 
+      {/* Feedback blocks */}
       <div style={{ flex: 1, overflowY: 'auto', padding: '0 1.25rem' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', paddingBottom: '1rem' }}>
           {FEEDBACK_BLOCKS.map(block => (
@@ -516,6 +524,7 @@ export default function FeedbackPanel({
         </div>
       </div>
 
+      {/* CTA */}
       <div style={{ flexShrink: 0, padding: '1.25rem' }}>
         <button className="btn-primary" style={{ width: '100%' }} onClick={onContinue}>
           Vedi una risposta che apre
