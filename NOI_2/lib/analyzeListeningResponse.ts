@@ -48,7 +48,7 @@ const CURIOSITY_SIGNALS = [
   /\be poi\b/i,
   /\baiutami a capire\b/i,
   /\bcosa ti manca\b/i,
-  /\bcosa Ã¨ successo\b/i,
+  /\"cosa Ã¨ successo\b/i,
   /\bmi interessa\b/i,
   /\bparlami\b/i,
   /\bcosa c'Ã¨ dietro\b/i,
@@ -97,7 +97,7 @@ const PRESENCE_SIGNALS = [
   /\bcosa provi tu\b/i,
   /\bquanto deve essere\b/i,
   /\bÃ¨ importante per te\b/i,
-  /\blo sento\b/i,
+  /\blo sento\"/i,
   /\bha colpito\"/i,
 ]
 
@@ -107,7 +107,7 @@ const JUDGMENT_SUSPENDED_POSITIVE = [
   /\bsembra\b/i,
   /\bmi chiedo\b/i,
   /\bpotrei sbagliarmi\b/i,
-  /\bnon sono sicuro\b/i,
+  /\bnon sono sicuro\"/i,
   /\bpotrebbe darsi\b/i,
   /\bÃ¨ possibile che\b/i,
   /\bse non sbaglio\b/i,
@@ -123,7 +123,7 @@ const OPEN_HORIZON_SIGNALS = [
   /\bcosa pensi\b/i,
   /\bcosa senti\b/i,
   /\bcome la vedi\b/i,
-  /\bapriamo\b/i,
+  /\"apriamo\"/i,
   /\bpotremmo\b/i,
   /\bpossiamo esplorare\b/i,
 ]
@@ -149,7 +149,7 @@ const CORRECTIVE_SIGNALS = [
   /\bnon Ã¨ un problema\b/i,
   /\bnon preoccuparti\b/i,
   /\btranquillo[/a]?\b/i,
-  /\bstai esagerando\b/i,
+  /\bstai esagerando\"/i,
   /\bÃ¨ semplice\b/i,
   /\bbasta cosÃ¬\b/i,
   /\bdevi solo\b/i,
@@ -158,7 +158,7 @@ const CORRECTIVE_SIGNALS = [
   /\bricorda che\b/i,
   /\bsai bene che\b/i,
   /\bti assicuro\b/i,
-  /\bgiuro\b/i,
+  /\bgiuro\"/i,
   /\bti prometto\b/i,
 ]
 
@@ -166,7 +166,7 @@ const DEFENSE_SIGNALS = [
   /\bsÃ¬ perÃ²\b/i,
   /\bsÃ¬, perÃ²\b/i,
   /\bcapisci che\b/i,
-  /\bcapisce che\b/i,
+  /\"capisce che\b/i,
   /\bho sempre fatto\"/i,
   /\bnon Ã¨ colpa mia\b/i,
   /\bnon dipende da me\b/i,
@@ -178,12 +178,12 @@ const DEFENSE_SIGNALS = [
 ]
 
 const JUDGMENT_NEGATIVE = [
-  /\bstai esagerando\b/i,
+  /\bstai esagerando\"/i,
   /\bnon ha senso\b/i,
   /\bsei troppo\b/i,
   /\bnon dovresti\b/i,
   /\bsbagliato[/a]?\b/i,
-  /\berrato[/a]?\b/i,
+  /\berrato[/a]?\"/i,
   /\bimmaginazione\b/i,
   /\bparanoia\b/i,
   /\btroppo sensibil[ei]\b/i,
@@ -355,7 +355,7 @@ function generateFeedback(
   } else if (state === 'difesa') {
     closure = `Qui stai difendendo la tua posizione con gentilezza, ma stai difendendo. La frase dell'altro ha toccato qualcosa che ti ha messo sulla difensiva, e la tua risposta prova a riportare equilibrio prima di aver davvero esplorato cosa stava dicendo.`
   } else if (corrective > 0) {
-    closure = `C'Ã¨ un passaggio in cui la tua risposta prova a sistemare troppo presto. ${scenario.possibleTrap}. Non C¨ sbagliato, Ã¨ umano â ma rischia di chiudere lo spazio prima di averlo aperto.`
+    closure = `C'Ã¨ un passaggio in cui la tua risposta prova a sistemare troppo presto. ${scenario.possibleTrap}. Non Ã¨ sbagliato, Ã¨ umano â ma rischia di chiudere lo spazio prima di averlo aperto.`
   } else {
     closure = `La tua risposta non chiude in modo evidente. Potresti perÃ² sostare ancora un secondo in piÃ¹ su ciÃ² che l'altro sta vivendo prima di offrire qualsiasi prospettiva.`
   }
@@ -379,7 +379,7 @@ function generateFeedback(
   // BLOCCO 4: Come potresti aprire l'orizzonte
   let horizon = ''
   if (activeCuriosity < 30) {
-    horizon = `Potresti provare a fare una sola domanda aperta â non per trovare una soluzione, ma per capire dav6ero cosa stava cercando di dire. A volte basta un "mi aiuti a capire meglio cosa intendi" per aprire uno spazio che prima era chiuso.`
+    horizon = `Potresti provare a fare una sola domanda aperta â non per trovare una soluzione, ma per capire davvero cosa stava cercando di dire. A volte basta un "mi aiuti a capire meglio cosa intendi" per aprire uno spazio che prima era chiuso.`
   } else if (presenceOnOther < 40) {
     horizon = `Prima di rispondere, potresti nominare ciÃ² che hai sentito nel tono dell'altro. Non per analizzarlo, ma per mostrargli che l'hai visto. Un riconoscimento â anche semplice â puÃ² aprire molto piÃ¹ di una risposta ben costruita.`
   } else {
@@ -512,4 +512,21 @@ export function analyzeListeningResponse(
     judgmentSuspended
   )
 
-  // Genera rispo
+  // Genera risposta alternativa
+  const alternativeResponse = generateAlternativeResponse(scenario)
+  const whyAlternativeWorks = generateWhyAlternativeWorks(globalState, scenario)
+
+  return {
+    stumbleAccepted,
+    judgmentSuspended,
+    activeCuriosity,
+    presenceOnOther,
+    openHorizon,
+    correctiveImpulse,
+    globalState,
+    globalStateNuance,
+    feedback,
+    alternativeResponse,
+    whyAlternativeWorks,
+  }
+}
