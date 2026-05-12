@@ -51,7 +51,7 @@ export function getOtherPersonMessage(
  * Restituisce la ragione o null se il dialogo continua.
  * - Prima del minimo (MIN_TURNS): mai chiudere
  * - Resolved: ultimo turno è curiosità/presenza
- * - Closed: due turni consecutivi di difesa
+ * - Closed: due turni consecutivi senza apertura (stesso trigger del withdrawalMessage)
  * - Timeout: raggiunto MAX_TURNS senza resolved o closed
  */
 export function getEndReason(
@@ -70,12 +70,12 @@ export function getEndReason(
     return 'resolved'
   }
 
-  // Closed: due turni consecutivi con globalState 'difesa'
+  // Closed: due turni consecutivi senza apertura (stesso trigger del withdrawalMessage)
   if (turns.length >= 2) {
     const prevTurn = turns[turns.length - 2]
     if (
-      lastTurn.analysis.globalState === 'difesa' &&
-      prevTurn.analysis.globalState === 'difesa'
+      !RESOLUTION_STATES.includes(lastTurn.analysis.globalState) &&
+      !RESOLUTION_STATES.includes(prevTurn.analysis.globalState)
     ) {
       return 'closed'
     }
