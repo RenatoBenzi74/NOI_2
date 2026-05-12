@@ -5,14 +5,15 @@
 
 import { Scenario, DialogueTurn, DialogueEndReason, AnalysisResult } from './types'
 
-export const MAX_TURNS = 3
+export const MIN_TURNS = 3   // minimo scambi prima di poter chiudere
+export const MAX_TURNS = 6   // massimo scambi (poi timeout)
 export const RESOLUTION_STATES = ['curiosità', 'presenza']
 
 /**
  * Restituisce il messaggio dell'altra persona per il turno corrente.
  * turnIndex=0 → scenario.quote
  * turnIndex≥1 → followUpOpening o followUpClosing basandosi sull'analisi precedente
- * Al turno 2 con due risposte scarse → withdrawalMessage
+ * Due risposte consecutive scarse dopo il minimo → withdrawalMessage
  */
 export function getOtherPersonMessage(
   scenario: Scenario,
@@ -33,8 +34,8 @@ export function getOtherPersonMessage(
 
   const lastIsGood = RESOLUTION_STATES.includes(lastTurn.analysis.globalState)
 
-  // Al turno 2 con due risposte consecutive scarse → usa withdrawalMessage
-  if (turnIndex === 2 && !lastIsGood) {
+  // Due risposte consecutive scarse (da turno 2 in poi) → withdrawalMessage
+  if (turnIndex >= 2 && !lastIsGood) {
     const prevTurn = previousTurns[previousTurns.length - 2]
     const prevIsAlsoBad = prevTurn && !RESOLUTION_STATES.includes(prevTurn.analysis.globalState)
     if (prevIsAlsoBad) {
@@ -48,7 +49,10 @@ export function getOtherPersonMessage(
 /**
  * Determina se il dialogo deve finire dopo questo turno.
  * Restituisce la ragione o null se il dialogo continua.
- * Minimo MAX_TURNS battute prima di qualsiasi chiusura.
+ * - Prima del minimo (MIN_TURNS): mai chiudere
+ * - Resolved: ultimo turno è curiosità/presenza
+ * - Closed: due turni consecutivi di difesa
+ * - Timeout: raggiunto MAX_TURNS senza resolved o closed
  */
 export function getEndReason(
   turns: DialogueTurn[],
@@ -56,8 +60,8 @@ export function getEndReason(
 ): DialogueEndReason | null {
   if (turns.length === 0) return null
 
-  // Minimo 3 battute: nessuna chiusura anticipata
-  if (turns.length < MAX_TURNS) return null
+  // Minimo MIN_TURNS battute: nessuna chiusura anticipata
+  if (turns.length < MIN_TURNS) return null
 
   const lastTurn = turns[turns.length - 1]
 
@@ -130,4 +134,4 @@ export function getEndMessage(endReason: DialogueEndReason): {
         body: "Hai attraversato il dialogo completo. L'altra persona non si è del tutto chiusa, ma non si è nemmeno aperta pienamente. Esplorare il feedback ti aiuterà a capire cosa ha funzionato e cosa potresti portare più in profondità.",
       }
   }
-      }
+}
