@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import AppShell from '@/components/AppShell'
 import HomeScreen from '@/components/HomeScreen'
 import ContextSelector from '@/components/ContextSelector'
+import DifficultySelector from '@/components/DifficultySelector'
 import ScenarioCard from '@/components/ScenarioCard'
 import ResponseInput from '@/components/ResponseInput'
 import ListeningDashboard from '@/components/ListeningDashboard'
@@ -29,6 +30,7 @@ import {
   AppScreen,
   AnalysisResult,
   Context,
+  Difficulty,
   DialogueTurn,
   DialogueEndReason,
   SavedExperience,
@@ -41,6 +43,7 @@ export default function Home() {
   // ============================================================
   const [screen, setScreen] = useState<AppScreen>('home')
   const [selectedContext, setSelectedContext] = useState<Context | null>(null)
+  const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty | null>(null)
   const [currentScenario, setCurrentScenario] = useState<Scenario | null>(null)
   const [userResponse, setUserResponse] = useState('')
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null)
@@ -75,7 +78,12 @@ export default function Home() {
 
   const handleContextConfirm = () => {
     if (!selectedContext) return
-    const scenario = generateScenario(selectedContext, usedScenarioIds)
+    goTo('difficulty')
+  }
+
+  const handleDifficultyConfirm = () => {
+    if (!selectedContext || !selectedDifficulty) return
+    const scenario = generateScenario(selectedContext, selectedDifficulty, usedScenarioIds)
     setCurrentScenario(scenario)
     setUserResponse('')
     setAnalysisResult(null)
@@ -86,8 +94,8 @@ export default function Home() {
   }
 
   const handleRegenerate = () => {
-    if (!selectedContext) return
-    const scenario = generateScenario(selectedContext, usedScenarioIds)
+    if (!selectedContext || !selectedDifficulty) return
+    const scenario = generateScenario(selectedContext, selectedDifficulty, usedScenarioIds)
     setCurrentScenario(scenario)
     setUserResponse('')
     setAnalysisResult(null)
@@ -158,11 +166,11 @@ export default function Home() {
   }
 
   const handleRestartSameContext = () => {
-    if (!selectedContext) {
+    if (!selectedContext || !selectedDifficulty) {
       goTo('context')
       return
     }
-    const scenario = generateScenario(selectedContext, usedScenarioIds)
+    const scenario = generateScenario(selectedContext, selectedDifficulty, usedScenarioIds)
     setCurrentScenario(scenario)
     setUserResponse('')
     setAnalysisResult(null)
@@ -174,6 +182,7 @@ export default function Home() {
 
   const handleChangeContext = () => {
     setSelectedContext(null)
+    setSelectedDifficulty(null)
     setCurrentScenario(null)
     setUserResponse('')
     setAnalysisResult(null)
@@ -215,6 +224,16 @@ export default function Home() {
           />
         )
 
+      case 'difficulty':
+        return (
+          <DifficultySelector
+            selected={selectedDifficulty}
+            onSelect={setSelectedDifficulty}
+            onConfirm={handleDifficultyConfirm}
+            onBack={() => goTo('context')}
+          />
+        )
+
       case 'scenario':
         if (!currentScenario) return null
         return (
@@ -232,6 +251,7 @@ export default function Home() {
           <DialogueView
             scenario={currentScenario}
             context={selectedContext}
+            difficulty={selectedDifficulty ?? 'medio'}
             onDialogueComplete={handleDialogueComplete}
             onBack={() => goTo('scenario')}
           />
