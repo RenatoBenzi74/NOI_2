@@ -3,11 +3,24 @@
 // Gestisce la logica del dialogo multi-turno
 // ============================================================
 
-import { Scenario, DialogueTurn, DialogueEndReason, AnalysisResult, Archetype } from './types'
+import { Scenario, DialogueTurn, DialogueEndReason, AnalysisResult, Archetype, Difficulty } from './types'
 
 export const MIN_TURNS = 3   // minimo scambi prima di poter chiudere
 export const MAX_TURNS = 6   // massimo scambi (poi timeout)
 export const RESOLUTION_STATES = ['curiosità', 'presenza']
+
+// ============================================================
+// SOGLIA DI APERTURA DEL PERSONAGGIO per difficoltà
+// facile  → il personaggio si apre già con 'risposta'
+// medio   → il personaggio si apre con 'curiosità' o 'presenza'
+// difficile → il personaggio si apre solo con 'presenza' piena
+// ============================================================
+
+function isCharacterReachable(state: string, difficulty: Difficulty): boolean {
+  if (difficulty === 'facile') return ['risposta', 'curiosità', 'presenza'].includes(state)
+  if (difficulty === 'difficile') return state === 'presenza'
+  return ['curiosità', 'presenza'].includes(state) // medio (default)
+}
 
 // ============================================================
 // POOL REATTIVO PER ARCHETIPO
@@ -29,7 +42,7 @@ const ARCHETYPE_FOLLOW_UPS: Record<Archetype, { opening: string[]; closing: stri
   accusa_indiretta: {
     opening: [
       'Forse ho detto troppo. O forse non abbastanza. Ma almeno ti sei fermato.',
-      'Non volevo che diventasse una cosa così grossa. Ma quando me lo chiedi così, sì, c\'è qualcosa.',
+      'Non volevo che diventasse una cosa così grossa. Ma quando me lo chiedi così, sì, c'è qualcosa.',
       'Sento che stai cercando di capire davvero. Non solo di spiegare.',
     ],
     closing: [
@@ -39,12 +52,12 @@ const ARCHETYPE_FOLLOW_UPS: Record<Archetype, { opening: string[]; closing: stri
   },
   delusione: {
     opening: [
-      'Non è solo questa volta. C\'era qualcosa che mi aspettavo e non è arrivato. E non sapevo nemmeno di aspettarmelo così tanto.',
+      'Non è solo questa volta. C'èra qualcosa che mi aspettavo e non è arrivato. E non sapevo nemmeno di aspettarmelo così tanto.',
       'Mi aiuta che tu lo abbia notato. La delusione fa meno male quando qualcuno la vede.',
       'Sì. Ecco. È esattamente quello che non riuscivo a dire prima.',
     ],
     closing: [
-      'Non c\'è niente da aggiungere, davvero.',
+      'Non c'è niente da aggiungere, davvero.',
       'Lascia stare. Non voglio trasformarla in una discussione.',
     ],
   },
@@ -52,7 +65,7 @@ const ARCHETYPE_FOLLOW_UPS: Record<Archetype, { opening: string[]; closing: stri
     opening: [
       'Non volevo parlarne. Ma forse ne avevo bisogno.',
       'È strano. Di solito tengo queste cose per me. Ma in qualche modo riesci a farmi continuare.',
-      'Non è facile dirlo. Ma sì — c\'è qualcosa che non ho ancora detto.',
+      'Non è facile dirlo. Ma sì — c'è qualcosa che non ho ancora detto.',
     ],
     closing: [
       'Non riesco ad andare avanti. Non adesso.',
@@ -62,7 +75,7 @@ const ARCHETYPE_FOLLOW_UPS: Record<Archetype, { opening: string[]; closing: stri
   bisogno_nascosto: {
     opening: [
       'Non sapevo nemmeno io cosa volevo. Adesso inizia a prendere forma.',
-      'C\'è qualcosa sotto che non ho nominato ancora. Dammi un secondo.',
+      'C'è qualcosa sotto che non ho nominato ancora. Dammi un secondo.',
       'Stai toccando qualcosa di più grande. Forse è quello il punto.',
     ],
     closing: [
@@ -83,9 +96,9 @@ const ARCHETYPE_FOLLOW_UPS: Record<Archetype, { opening: string[]; closing: stri
   },
   richiesta_mascherata: {
     opening: [
-      'Forse stavo aspettando che qualcuno me lo chiedesse. E tu l\'hai fatto.',
-      'Non so esattamente cosa chiedo. Ma sento che c\'è qualcosa. E tu l\'hai sentito anche tu.',
-      'Hai ragione. C\'è una domanda sotto. Solo che non l\'ho mai formulata bene.',
+      'Forse stavo aspettando che qualcuno me lo chiedesse. E tu l'hai fatto.',
+      'Non so esattamente cosa chiedo. Ma sento che c'è qualcosa. E tu l'hai sentito anche tu.',
+      'Hai ragione. C'è una domanda sotto. Solo che non l'ho mai formulata bene.',
     ],
     closing: [
       'Lascia stare. Non era importante.',
@@ -94,8 +107,8 @@ const ARCHETYPE_FOLLOW_UPS: Record<Archetype, { opening: string[]; closing: stri
   },
   resistenza: {
     opening: [
-      'Non mi aspettavo che tu volessi capire cosa c\'è dietro la mia resistenza. Di solito si insiste e basta.',
-      'Hai ragione che c\'è qualcosa che voglio proteggere. Solo che non l\'avevo formulato così.',
+      'Non mi aspettavo che tu volessi capire cosa c'è dietro la mia resistenza. Di solito si insiste e basta.',
+      'Hai ragione che c'è qualcosa che voglio proteggere. Solo che non l'avevo formulato così.',
       'Non è la prima volta che cambiano le cose senza chiedere. E ogni volta è lo stesso.',
     ],
     closing: [
@@ -116,9 +129,9 @@ const ARCHETYPE_FOLLOW_UPS: Record<Archetype, { opening: string[]; closing: stri
   },
   frase_spiazzante: {
     opening: [
-      'L\'ho detto senza pensarci. Poi è rimasta lì. Forse perché era vera.',
-      'Non me lo aspettavo che ti fermasse. Ma sono contento che l\'abbia fatto.',
-      'Sì, quella frase l\'ho detta da qualche parte precisa. Se vuoi, ti spiego.',
+      'L'ho detto senza pensarci. Poi è rimasta lì. Forse perché era vera.',
+      'Non me lo aspettavo che ti fermasse. Ma sono contento che l'abbia fatto.',
+      'Sì, quella frase l'ho detta da qualche parte precisa. Se vuoi, ti spiego.',
     ],
     closing: [
       'Forse non avrei dovuto dirlo. Lascia stare.',
@@ -179,7 +192,8 @@ export function getMicroFeedback(state: string, turnIndex: number): string {
 export function getOtherPersonMessage(
   scenario: Scenario,
   turnIndex: number,
-  previousTurns: DialogueTurn[]
+  previousTurns: DialogueTurn[],
+  difficulty: Difficulty = 'medio'
 ): string | null {
   if (turnIndex === 0) {
     return scenario.quote
@@ -190,12 +204,12 @@ export function getOtherPersonMessage(
     return scenario.followUpClosing
   }
 
-  const lastIsGood = RESOLUTION_STATES.includes(lastTurn.analysis.globalState)
+  const lastIsGood = isCharacterReachable(lastTurn.analysis.globalState, difficulty)
 
   // Due risposte consecutive scarse → withdrawalMessage
   if (turnIndex >= 2 && !lastIsGood) {
     const prevTurn = previousTurns[previousTurns.length - 2]
-    const prevIsAlsoBad = prevTurn && !RESOLUTION_STATES.includes(prevTurn.analysis.globalState)
+    const prevIsAlsoBad = prevTurn && !isCharacterReachable(prevTurn.analysis.globalState, difficulty)
     if (prevIsAlsoBad) {
       return scenario.withdrawalMessage
     }
@@ -259,7 +273,7 @@ export function getBestAnalysis(turns: DialogueTurn[]): AnalysisResult | null {
   const stateRanking: Record<string, number> = {
     difesa: 0,
     risposta: 1,
-    curiosità: 2,
+    'curiosità': 2,
     presenza: 3,
   }
 
