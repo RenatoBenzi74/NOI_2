@@ -25,10 +25,13 @@ export type Archetype =
 
 export type ListeningState = 'difesa' | 'risposta' | 'curiosità' | 'presenza'
 
+export type Difficulty = 'facile' | 'medio' | 'difficile'
+
 export interface Scenario {
   id: string
   context: Context
   archetype: Archetype
+  difficulty: Difficulty
   title: string
   setup: string
   quote: string
@@ -49,24 +52,24 @@ export interface ContextInfo {
 }
 
 export interface IndicatorScores {
-  stumbleAccepted: number
-  judgmentSuspended: number
-  activeCuriosity: number
-  presenceOnOther: number
-  openHorizon: number
-  correctiveImpulse: number
+  stumbleAccepted: number       // Inciampo accolto (0–100)
+  judgmentSuspended: number     // Giudizio sospeso (0–100)
+  activeCuriosity: number       // Curiosità attiva (0–100)
+  presenceOnOther: number       // Presenza sull'altro (0–100)
+  openHorizon: number           // Orizzonte aperto (0–100)
+  correctiveImpulse: number     // Impulso a correggere (0–100, inverso)
 }
 
 export interface FeedbackBlocks {
-  closure: string
-  opening: string
-  unheard: string
-  horizon: string
+  closure: string               // Dove ti stai chiudendo
+  opening: string               // Dove si intravede apertura
+  unheard: string               // Cosa non hai ancora ascoltato
+  horizon: string               // Come potresti aprire l'orizzonte
 }
 
 export interface AnalysisResult extends IndicatorScores {
   globalState: ListeningState
-  globalStateNuance?: string
+  globalStateNuance?: string    // Sfumatura dello stato (es. "Risposta gentile ma chiudente")
   feedback: FeedbackBlocks
   alternativeResponse: string
   whyAlternativeWorks: string
@@ -96,6 +99,7 @@ export interface SavedExperience {
 export type AppScreen =
   | 'home'
   | 'context'
+  | 'difficulty'
   | 'scenario'
   | 'response'
   | 'dashboard'
@@ -116,4 +120,4 @@ export interface AppState {
   analysisResult: AnalysisResult | null
   reflection: string
   savedExperiences: SavedExperience[]
-  }
+}
