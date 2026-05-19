@@ -804,3 +804,48 @@ export const scenarios: Scenario[] = [
     withdrawalMessage: 'Le mando una mail. Preferirei continuare per iscritto.',
   },
 ]
+
+export const contextInfo = [
+  {
+    id: 'lavoro' as const,
+    label: 'Lavoro',
+    description: 'Colleghi, manager, collaboratori. Pressione, ruoli e aspettative professionali.',
+    tension: 'Pressione, ruoli, aspettative non dette',
+    emoji: '💼',
+  },
+  {
+    id: 'famiglia' as const,
+    label: 'Famiglia',
+    description: 'Genitori, figli, fratelli. Storia comune e dinamiche profonde.',
+    tension: 'Storia comune, aspettative profonde, legami forti',
+    emoji: '🏠',
+  },
+  {
+    id: 'amicizie' as const,
+    label: 'Amicizie',
+    description: 'Amici stretti, conoscenti. Fiducia e reciprocità tra pari.',
+    tension: 'Fiducia, reciprocità, non detto tra pari',
+    emoji: '🤝',
+  },
+  {
+    id: 'coppia' as const,
+    label: 'Coppia',
+    description: 'Partner e relazioni intime. Bisogni emotivi e vulnerabilità.',
+    tension: 'Intimità, vulnerabilità, aspettative reciproche',
+    emoji: '❤️',
+  },
+  {
+    id: 'gruppi' as const,
+    label: 'Gruppi',
+    description: 'Team, community, riunioni. Appartenenza e dinamiche collettive.',
+    tension: 'Appartenenza, ruoli nel gruppo, voce e silenzio',
+    emoji: '👥',
+  },
+  {
+    id: 'vendita' as const,
+    label: 'Vendita / Cliente',
+    description: 'Clienti e trattative. Fiducia professionale da costruire.',
+    tension: 'Obiettivi divergenti, fiducia da costruire',
+    emoji: '🤜',
+  },
+]
