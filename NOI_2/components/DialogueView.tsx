@@ -6,7 +6,7 @@
 // ============================================================
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Scenario, Context, DialogueTurn, DialogueEndReason, AnalysisResult } from '@/lib/types'
+import { Scenario, Context, Difficulty, DialogueTurn, DialogueEndReason, AnalysisResult } from '@/lib/types'
 import { analyzeListeningResponse } from '@/lib/analyzeListeningResponse'
 import { MAX_TURNS, getOtherPersonMessage, getEndReason, getEndMessage, getMicroFeedback } from '@/lib/dialogueEngine'
 
@@ -17,6 +17,7 @@ import { MAX_TURNS, getOtherPersonMessage, getEndReason, getEndMessage, getMicro
 interface DialogueViewProps {
   scenario: Scenario
   context: Context
+  difficulty?: Difficulty
   onDialogueComplete: (turns: DialogueTurn[], endReason: DialogueEndReason) => void
   onBack: () => void
 }
@@ -164,7 +165,7 @@ function TypingIndicator({ label }: { label: string }) {
 // Main component
 // ============================================================
 
-export default function DialogueView({ scenario, context, onDialogueComplete, onBack }: DialogueViewProps) {
+export default function DialogueView({ scenario, context, difficulty = 'medio', onDialogueComplete, onBack }: DialogueViewProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([
     { role: 'other', text: scenario.quote },
   ])
@@ -225,7 +226,7 @@ export default function DialogueView({ scenario, context, onDialogueComplete, on
 
       setTimeout(() => {
         const nextTurnIndex = turnIndex + 1
-        const nextMsg = getOtherPersonMessage(scenario, nextTurnIndex, updatedTurns)
+        const nextMsg = getOtherPersonMessage(scenario, nextTurnIndex, updatedTurns, difficulty)
         const reason = getEndReason(updatedTurns, turnIndex)
 
         if (nextMsg) {
