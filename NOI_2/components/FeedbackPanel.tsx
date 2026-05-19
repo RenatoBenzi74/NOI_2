@@ -127,7 +127,7 @@ const INDICATORS: {
     },
     getInterpretation: (v) =>
       v >= 65
-        ? 'Stai esplorando il mondo dell\''altro invece di concludere o spiegare.'
+        ? 'Stai esplorando il mondo dell\'altro invece di concludere o spiegare.'
         : v >= 40
         ? 'C\'è un inizio di esplorazione, ma la risposta tende ancora verso la conclusione.'
         : 'La risposta è più orientata a rispondere e risolvere che a capire cosa sta succedendo.',
