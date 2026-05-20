@@ -67,22 +67,34 @@ export default function SummaryScreen({
             { label: 'Inciampo accolto', value: analysis.stumbleAccepted, inverse: false },
             { label: 'Giudizio sospeso', value: analysis.judgmentSuspended, inverse: false },
             { label: 'Curiosità attiva', value: analysis.activeCuriosity, inverse: false },
-            { label: 'Presenza sull\'altro', value: analysis.presenceOnOther, inverse: false },
+            { label: 'Presenza sull’altro', value: analysis.presenceOnOther, inverse: false },
             { label: 'Orizzonte aperto', value: analysis.openHorizon, inverse: false },
             { label: 'Impulso correttivo', value: analysis.correctiveImpulse, inverse: true },
-          ].map((item) => (
-            <div key={item.label} className="p-3 rounded-xl"
-              style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
-              <div className="text-xs mb-1" style={{ color: 'rgba(240,238,255,0.45)' }}>{item.label}</div>
-              <div className="text-lg font-bold" style={{
-                color: item.inverse
-                  ? item.value >= 60 ? '#fca5a5' : item.value >= 40 ? '#fcd34d' : '#86efac'
-                  : item.value >= 60 ? '#d8b4fe' : item.value >= 40 ? '#a5b4fc' : '#93c5fd',
-              }}>
-                {item.value}
+          ].map((item) => {
+            const isGood = item.inverse ? item.value < 35 : item.value >= 60
+            const isMed  = item.inverse ? item.value < 60 : item.value >= 30
+            const color  = isGood ? (item.inverse ? '#86efac' : '#d8b4fe')
+                         : isMed  ? '#fcd34d'
+                         : (item.inverse ? '#fca5a5' : '#93c5fd')
+            const label  = isGood ? (item.inverse ? 'Contenuto' : 'Alta')
+                         : isMed  ? 'Media'
+                         : (item.inverse ? 'Elevato' : 'Bassa')
+            const barPct = item.inverse ? (100 - item.value) : item.value
+            return (
+              <div key={item.label} className="p-3 rounded-xl"
+                style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <div className="text-xs mb-2" style={{ color: 'rgba(240,238,255,0.45)' }}>{item.label}</div>
+                {/* Barra visiva */}
+                <div className="rounded-full mb-1.5" style={{ height: 4, background: 'rgba(255,255,255,0.08)' }}>
+                  <div className="rounded-full h-full transition-all" style={{ width: barPct + '%', background: color, opacity: 0.85 }} />
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold" style={{ color }}>{label}</span>
+                  <span className="text-xs" style={{ color: 'rgba(240,238,255,0.3)' }}>{item.value}/100</span>
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
 
         {/* Feedback snippet */}
