@@ -236,8 +236,9 @@ function calcPresenceOnOther(text: string): number {
   const base = Math.min(presenceMatches * 20, 85)
   // Penalità se ci sono molti segnali di difesa (sposta su di sé)
   const defenseCount = countMatches(text, DEFENSE_SIGNALS)
+  const baseline = defenseCount === 0 ? 12 : 0
   const penalty = defenseCount * 10
-  return Math.max(base - penalty, 0)
+  return Math.max(base + baseline - penalty, 0)
 }
 
 function calcJudgmentSuspended(text: string): number {
@@ -305,9 +306,9 @@ function calcGlobalState(
   }
 
   // PRESENZA
-  if (activeCuriosity >= 60 && presenceOnOther >= 55 && openHorizon >= 50 && correctiveImpulse <= 35) {
-    if (openHorizon < 60) {
-      return { state: 'presenza', nuance: 'Buona presenza, ma poco orizzonte' }
+  if (activeCuriosity >= 45 && presenceOnOther >= 28 && correctiveImpulse <= 50 && (openHorizon >= 25 || judgmentSuspended >= 50)) {
+    if (presenceOnOther < 45 || openHorizon < 35) {
+      return { state: 'presenza', nuance: 'Buona presenza — continua ad aprire lo spazio' }
     }
     return { state: 'presenza', nuance: 'Stai facendo spazio all\'altro senza sparire tu' }
   }
