@@ -61,6 +61,16 @@ const CURIOSITY_SIGNALS = [
   /\bcom'è stato\b/i,
   /\bcosa ne pensi\b/i,
   /\bcosa ti aspetti\b/i,
+  /\bcosa ti preoccupa\b/i,
+  /\bmi puoi dire\b/i,
+  /\bmi racconta\b/i,
+  /\bcosa cambieresti\b/i,
+  /\bcosa stai sentendo\b/i,
+  /\bda dove viene\b/i,
+  /\bperché pensi\b/i,
+  /\bcosa significherebbe\b/i,
+  /\bcome ti è sembrato\b/i,
+  /\bcosa vorresti che\b/i,
 ]
 
 const PRESENCE_SIGNALS = [
@@ -99,6 +109,15 @@ const PRESENCE_SIGNALS = [
   /\bè importante per te\b/i,
   /\blo sento\b/i,
   /\bha colpito\b/i,
+  /\bcapisco che\b/i,
+  /\bcapisco la\b/i,
+  /\bcomprendo che\b/i,
+  /\bimmagino quanto\b/i,
+  /\bha senso che\b/i,
+  /\bvedo come\b/i,
+  /\bdeve essere strano\b/i,
+  /\bnon deve essere facile\b/i,
+  /\bci vuole coraggio\b/i,
 ]
 
 const JUDGMENT_SUSPENDED_POSITIVE = [
@@ -236,7 +255,7 @@ function calcPresenceOnOther(text: string): number {
   const base = Math.min(presenceMatches * 20, 85)
   // Penalità se ci sono molti segnali di difesa (sposta su di sé)
   const defenseCount = countMatches(text, DEFENSE_SIGNALS)
-  const baseline = defenseCount === 0 ? 12 : 0
+  const baseline = defenseCount === 0 ? 18 : 0
   const penalty = defenseCount * 10
   return Math.max(base + baseline - penalty, 0)
 }
@@ -306,7 +325,7 @@ function calcGlobalState(
   }
 
   // PRESENZA
-  if (activeCuriosity >= 45 && presenceOnOther >= 28 && correctiveImpulse <= 50 && (openHorizon >= 25 || judgmentSuspended >= 50)) {
+  if (activeCuriosity >= 35 && presenceOnOther >= 18 && correctiveImpulse <= 60 && (openHorizon >= 20 || judgmentSuspended >= 45)) {
     if (presenceOnOther < 45 || openHorizon < 35) {
       return { state: 'presenza', nuance: 'Buona presenza — continua ad aprire lo spazio' }
     }
@@ -316,9 +335,9 @@ function calcGlobalState(
   // CURIOSITÀ
   if (activeCuriosity >= 20 && judgmentSuspended >= 40) {
     if (correctiveImpulse >= 40) {
-      return { state: 'curiosità', nuance: 'Curiosità presente ma ancora molto controllo' }
+      return { state: 'curiosità', nuance: 'C'è curiosità — stai esplorando il vissuto dell'altro' }
     }
-    return { state: 'curiosità', nuance: 'Stai iniziando a esplorare il mondo dell\'altro' }
+    return { state: 'curiosità', nuance: 'C\'è apertura autentica — stai andando nella direzione giusta' }
   }
 
   // RISPOSTA con sfumature
