@@ -335,7 +335,7 @@ function calcGlobalState(
   // CURIOSITÀ
   if (activeCuriosity >= 20 && judgmentSuspended >= 40) {
     if (correctiveImpulse >= 40) {
-      return { state: 'curiosità', nuance: 'C'è curiosità — stai esplorando il vissuto dell'altro' }
+      return { state: 'curiosità', nuance: "C'è curiosità — stai esplorando il vissuto dell'altro" }
     }
     return { state: 'curiosità', nuance: 'C\'è apertura autentica — stai andando nella direzione giusta' }
   }

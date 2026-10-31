@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Scenario } from '@/lib/types'
 
 interface ResponseInputProps {
@@ -19,6 +19,72 @@ export default function ResponseInput({
   const [text, setText] = useState(initialValue)
   const [showHint, setShowHint] = useState(false)
 
+  // Dettatura vocale (Web Speech API del browser: gratuita, nessun costo API)
+  const [voiceSupported, setVoiceSupported] = useState(false)
+  const [listening, setListening] = useState(false)
+  const [interim, setInterim] = useState('')
+  const [voiceError, setVoiceError] = useState('')
+  const recognitionRef = useRef<any>(null)
+  const baseTextRef = useRef('')
+
+  useEffect(() => {
+    const w = window as any
+    setVoiceSupported(!!(w.SpeechRecognition || w.webkitSpeechRecognition))
+    return () => recognitionRef.current?.abort()
+  }, [])
+
+  const stopVoice = () => {
+    recognitionRef.current?.stop()
+  }
+
+  const startVoice = () => {
+    const w = window as any
+    const SR = w.SpeechRecognition || w.webkitSpeechRecognition
+    if (!SR) return
+    setVoiceError('')
+    baseTextRef.current = text
+    const rec = new SR()
+    rec.lang = 'it-IT'
+    rec.continuous = true
+    rec.interimResults = true
+
+    rec.onresult = (event: any) => {
+      let finals = ''
+      let interimChunk = ''
+      for (let i = 0; i < event.results.length; i++) {
+        const r = event.results[i]
+        if (r.isFinal) finals += r[0].transcript
+        else interimChunk += r[0].transcript
+      }
+      const base = baseTextRef.current
+      const sep = base && !/\s$/.test(base) && finals ? ' ' : ''
+      setText(base + sep + finals.trimStart())
+      setInterim(interimChunk)
+      if (showHint) setShowHint(false)
+    }
+    rec.onerror = (e: any) => {
+      if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+        setVoiceError('Per rispondere a voce devi consentire l\'accesso al microfono.')
+      } else if (e.error === 'no-speech') {
+        setVoiceError('Non ho sentito nulla. Riprova avvicinandoti al microfono.')
+      } else if (e.error !== 'aborted') {
+        setVoiceError('La dettatura si è interrotta. Puoi riprovare o scrivere.')
+      }
+    }
+    rec.onend = () => {
+      setListening(false)
+      setInterim('')
+    }
+
+    recognitionRef.current = rec
+    try {
+      rec.start()
+      setListening(true)
+    } catch {
+      setListening(false)
+    }
+  }
+
   const wordCount = text.trim().split(/\s+/).filter(Boolean).length
   const isReady = wordCount >= 5
 
@@ -27,6 +93,7 @@ export default function ResponseInput({
       setShowHint(true)
       return
     }
+    if (listening) stopVoice()
     onSubmit(text)
   }
 
@@ -66,15 +133,36 @@ export default function ResponseInput({
         <div className="relative flex-1">
           <textarea
             className="noi-textarea w-full"
-            style={{ minHeight: '200px', height: '100%' }}
-            placeholder="Scrivi qui la tua risposta, come se la persona fosse davanti a te…"
-            value={text}
+            style={{ minHeight: '200px', height: '100%', paddingBottom: voiceSupported ? '3.5rem' : undefined }}
+            placeholder="Scrivi o detta qui la tua risposta, come se la persona fosse davanti a te…"
+            value={listening && interim ? (text ? text + ' ' : '') + interim : text}
             onChange={(e) => {
+              if (listening) stopVoice()
               setText(e.target.value)
               if (showHint) setShowHint(false)
             }}
             autoFocus
           />
+          {/* Microfono: rispondi a voce */}
+          {voiceSupported && (
+            <button
+              type="button"
+              onClick={listening ? stopVoice : startVoice}
+              aria-label={listening ? 'Ferma la dettatura' : 'Rispondi a voce'}
+              className="absolute bottom-3 left-3 flex items-center gap-2 rounded-full px-3 py-2 text-sm"
+              style={{
+                background: listening ? 'rgba(239,68,68,0.18)' : 'rgba(124,58,237,0.18)',
+                border: listening ? '1px solid rgba(239,68,68,0.5)' : '1px solid rgba(168,85,247,0.35)',
+                color: listening ? '#fca5a5' : '#e9d5ff',
+              }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="9" y="2" width="6" height="12" rx="3" />
+                <path d="M5 11a7 7 0 0 0 14 0M12 18v4" />
+              </svg>
+              {listening ? 'Ti ascolto… tocca per fermare' : 'Rispondi a voce'}
+            </button>
+          )}
           {/* Word count */}
           {text.length > 0 && (
             <div className="absolute bottom-4 right-4 text-xs"
@@ -83,6 +171,13 @@ export default function ResponseInput({
             </div>
           )}
         </div>
+
+        {voiceError && (
+          <div className="text-sm py-2 px-4 rounded-xl text-center animate-fade-in"
+            style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.25)', color: '#fca5a5' }}>
+            {voiceError}
+          </div>
+        )}
 
         {/* Hint */}
         {showHint && (
